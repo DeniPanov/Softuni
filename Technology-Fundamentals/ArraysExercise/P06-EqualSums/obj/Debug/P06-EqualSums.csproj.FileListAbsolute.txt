@@ -1,0 +1,7 @@
+C:\Users\valya\source\repos\ArraysExercise\P06-EqualSums\bin\Debug\P06-EqualSums.exe.config
+C:\Users\valya\source\repos\ArraysExercise\P06-EqualSums\bin\Debug\P06-EqualSums.exe
+C:\Users\valya\source\repos\ArraysExercise\P06-EqualSums\bin\Debug\P06-EqualSums.pdb
+C:\Users\valya\source\repos\ArraysExercise\P06-EqualSums\obj\Debug\P06-EqualSums.csprojAssemblyReference.cache
+C:\Users\valya\source\repos\ArraysExercise\P06-EqualSums\obj\Debug\P06-EqualSums.csproj.CoreCompileInputs.cache
+C:\Users\valya\source\repos\ArraysExercise\P06-EqualSums\obj\Debug\P06-EqualSums.exe
+C:\Users\valya\source\repos\ArraysExercise\P06-EqualSums\obj\Debug\P06-EqualSums.pdb
