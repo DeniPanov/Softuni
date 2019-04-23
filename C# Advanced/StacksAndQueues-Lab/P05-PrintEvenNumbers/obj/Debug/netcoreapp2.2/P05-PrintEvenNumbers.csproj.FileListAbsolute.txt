@@ -1,0 +1,11 @@
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\bin\Debug\netcoreapp2.2\P05-PrintEvenNumbers.deps.json
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\bin\Debug\netcoreapp2.2\P05-PrintEvenNumbers.runtimeconfig.json
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\bin\Debug\netcoreapp2.2\P05-PrintEvenNumbers.runtimeconfig.dev.json
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\bin\Debug\netcoreapp2.2\P05-PrintEvenNumbers.dll
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\bin\Debug\netcoreapp2.2\P05-PrintEvenNumbers.pdb
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\obj\Debug\netcoreapp2.2\P05-PrintEvenNumbers.csprojAssemblyReference.cache
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\obj\Debug\netcoreapp2.2\P05-PrintEvenNumbers.csproj.CoreCompileInputs.cache
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\obj\Debug\netcoreapp2.2\P05-PrintEvenNumbers.AssemblyInfoInputs.cache
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\obj\Debug\netcoreapp2.2\P05-PrintEvenNumbers.AssemblyInfo.cs
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\obj\Debug\netcoreapp2.2\P05-PrintEvenNumbers.dll
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P05-PrintEvenNumbers\obj\Debug\netcoreapp2.2\P05-PrintEvenNumbers.pdb

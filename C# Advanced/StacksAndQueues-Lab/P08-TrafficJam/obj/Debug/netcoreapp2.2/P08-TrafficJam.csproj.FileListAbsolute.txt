@@ -1,0 +1,11 @@
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\bin\Debug\netcoreapp2.2\P08-TrafficJam.deps.json
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\bin\Debug\netcoreapp2.2\P08-TrafficJam.runtimeconfig.json
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\bin\Debug\netcoreapp2.2\P08-TrafficJam.runtimeconfig.dev.json
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\bin\Debug\netcoreapp2.2\P08-TrafficJam.dll
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\bin\Debug\netcoreapp2.2\P08-TrafficJam.pdb
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\obj\Debug\netcoreapp2.2\P08-TrafficJam.csprojAssemblyReference.cache
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\obj\Debug\netcoreapp2.2\P08-TrafficJam.csproj.CoreCompileInputs.cache
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\obj\Debug\netcoreapp2.2\P08-TrafficJam.AssemblyInfoInputs.cache
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\obj\Debug\netcoreapp2.2\P08-TrafficJam.AssemblyInfo.cs
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\obj\Debug\netcoreapp2.2\P08-TrafficJam.dll
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P08-TrafficJam\obj\Debug\netcoreapp2.2\P08-TrafficJam.pdb

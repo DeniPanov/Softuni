@@ -1,0 +1,11 @@
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\bin\Debug\netcoreapp2.2\P04-MatchingBrakets.deps.json
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\bin\Debug\netcoreapp2.2\P04-MatchingBrakets.runtimeconfig.json
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\bin\Debug\netcoreapp2.2\P04-MatchingBrakets.runtimeconfig.dev.json
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\bin\Debug\netcoreapp2.2\P04-MatchingBrakets.dll
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\bin\Debug\netcoreapp2.2\P04-MatchingBrakets.pdb
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\obj\Debug\netcoreapp2.2\P04-MatchingBrakets.csprojAssemblyReference.cache
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\obj\Debug\netcoreapp2.2\P04-MatchingBrakets.csproj.CoreCompileInputs.cache
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\obj\Debug\netcoreapp2.2\P04-MatchingBrakets.AssemblyInfoInputs.cache
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\obj\Debug\netcoreapp2.2\P04-MatchingBrakets.AssemblyInfo.cs
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\obj\Debug\netcoreapp2.2\P04-MatchingBrakets.dll
+C:\Users\Denkata\source\repos\StacksAndQueues-Lab\P04-MatchingBrakets\obj\Debug\netcoreapp2.2\P04-MatchingBrakets.pdb
