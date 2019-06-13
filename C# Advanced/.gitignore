@@ -1,5 +1,5 @@
 *.exe
 *.pdb
-*.json
+*.json*.csproj
 obj
 Properties
