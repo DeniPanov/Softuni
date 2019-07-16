@@ -1,7 +1,0 @@
-C:\Users\valya\source\repos\ArraysExercise\P07-MaxSequenceOfEqualElements\bin\Debug\P07-MaxSequenceOfEqualElements.exe.config
-C:\Users\valya\source\repos\ArraysExercise\P07-MaxSequenceOfEqualElements\bin\Debug\P07-MaxSequenceOfEqualElements.exe
-C:\Users\valya\source\repos\ArraysExercise\P07-MaxSequenceOfEqualElements\bin\Debug\P07-MaxSequenceOfEqualElements.pdb
-C:\Users\valya\source\repos\ArraysExercise\P07-MaxSequenceOfEqualElements\obj\Debug\P07-MaxSequenceOfEqualElements.csprojAssemblyReference.cache
-C:\Users\valya\source\repos\ArraysExercise\P07-MaxSequenceOfEqualElements\obj\Debug\P07-MaxSequenceOfEqualElements.csproj.CoreCompileInputs.cache
-C:\Users\valya\source\repos\ArraysExercise\P07-MaxSequenceOfEqualElements\obj\Debug\P07-MaxSequenceOfEqualElements.exe
-C:\Users\valya\source\repos\ArraysExercise\P07-MaxSequenceOfEqualElements\obj\Debug\P07-MaxSequenceOfEqualElements.pdb
