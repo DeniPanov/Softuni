@@ -51,7 +51,7 @@ FROM WizzardDeposits
 GROUP BY DepositGroup, MagicWandCreator
 ORDER BY MagicWandCreator, DepositGroup 
 
---09. Age Groups 
+--09. Age Groups / NOT FINISHED
 
 SELECT (
 
@@ -69,3 +69,11 @@ FROM WizzardDeposits ) AS AgeGroup
 , COUNT(FirstName)
 FROM WizzardDeposits
 GROUP BY AgeGroup
+
+--10. First Letter 
+
+SELECT DISTINCT LEFT(FirstName,1) AS FirstLetter
+FROM WizzardDeposits
+WHERE DepositGroup LIKE 'Troll Chest'
+GROUP BY FirstName
+ORDER BY FirstLetter
