@@ -69,3 +69,53 @@ INSERT INTO People(Name, Picture, Height, Weight, GENDER, Birthdate, Biography)V
 
 --Problem 8.	Create Table Users
 
+CREATE TABLE Users(
+ID INT PRIMARY KEY IDENTITY
+,Username VARCHAR (30) NOT NULL
+,Password VARCHAR (26) NOT NULL
+,ProfilePicture VARBINARY (MAX)
+,LastLoginTime DATE
+,IsDeleted BIT
+)
+
+INSERT INTO Users (Username, Password, ProfilePicture, LastLoginTime, IsDeleted)
+VALUES
+('Albena', 'TopSecret', 1000, '2019-01-01',0)
+,('Angel', 'TopSecret', 254, '2019-02-01',1)
+,('Sasho', 'TopSecret', 512, '2019-03-01',0)
+,('Mario', 'TopSecret', 1000, '2019-04-01',1)
+,('Krasi', 'TopSecret', 1000, '2019-05-01',0);
+
+--Problem 9.	Change Primary Key
+
+ALTER TABLE Users
+DROP CONSTRAINT [PK__Users__3214EC275228AF24]
+
+ALTER TABLE Users
+ADD CONSTRAINT PK_Users PRIMARY KEY (ID, Username)
+
+--Problem 10.	Add Check Constraint
+
+ALTER TABLE Users
+ADD CONSTRAINT CHK_Password CHECK (LEN(Password) >= 5) 
+
+--Problem 11.	Set Default Value of a Field
+
+ALTER TABLE Users
+ADD CONSTRAINT DF_LastLoginTime DEFAULT GETDATE() FOR LastLoginTime
+
+--Problem 12.	Set Unique Field
+
+ALTER TABLE Users
+DROP CONSTRAINT PK_Users
+
+ALTER TABLE Users
+ADD CONSTRAINT PK_Users PRIMARY KEY (ID)
+
+ALTER TABLE Users
+ADD CONSTRAINT UQ_Username UNIQUE (Username) 
+
+ALTER TABLE Users
+ADD CONSTRAINT CHK_UsernameLenght CHECK (LEN(Username) >= 3) 
+
+--Problem 13.	Movies Database
