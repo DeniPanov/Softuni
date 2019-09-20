@@ -119,3 +119,69 @@ ALTER TABLE Users
 ADD CONSTRAINT CHK_UsernameLenght CHECK (LEN(Username) >= 3) 
 
 --Problem 13.	Movies Database
+
+CREATE DATABASE Movies
+
+USE Movies
+
+CREATE TABLE Directors(
+Id INT PRIMARY KEY IDENTITY
+,DirectorName NVARCHAR (30) NOT NULL
+,Notes NVARCHAR(MAX)
+)
+
+CREATE TABLE Genres(
+Id INT PRIMARY KEY IDENTITY
+,GenreName NVARCHAR (30) NOT NULL
+,Notes NVARCHAR(MAX)
+)
+
+CREATE TABLE Categories(
+Id INT PRIMARY KEY IDENTITY
+,CategoryName NVARCHAR (30) NOT NULL
+,Notes NVARCHAR(MAX)
+)
+
+CREATE TABLE Movies(
+Id INT PRIMARY KEY IDENTITY
+,Title NVARCHAR (50)
+,DirectorId INT NOT NULL
+,CopyrightYear DATE
+,Lenght DECIMAL (5,2)
+,GenreId INT NOT NULL
+,CategoryId INT NOT NULL
+,Rating DECIMAL (5,2)
+,Notes NVARCHAR (MAX)
+
+CONSTRAINT FK_Director FOREIGN KEY (DirectorId) REFERENCES Directors(Id)
+,CONSTRAINT FK_Genre FOREIGN KEY (GenreId) REFERENCES Genres(Id)
+,CONSTRAINT FK_Category FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
+)
+
+INSERT INTO Directors(DirectorName, Notes) VALUES
+('Peter', 'Some notes here...')
+,('Ivan', 'Some notes here...')
+,('Dani', 'Some notes here...')
+,('Martin', NULL)
+,('Ralica', 'Some notes here...')
+
+INSERT INTO Categories(CategoryName, Notes) VALUES
+('Action', 'Some additional notes...')
+,('Comedy', 'Some additional notes...')
+,('Horror', 'Some additional notes...')
+,('Musical', 'Some additional notes...')
+,('Drama', 'Some additional notes...')
+
+INSERT INTO Genres(GenreName, Notes) VALUES
+('Action', 'Some additional notes...')
+,('Comedy', 'Some additional notes...')
+,('Horror', 'Some additional notes...')
+,('Musical', 'Some additional notes...')
+,('Drama', 'Some additional notes...')
+
+INSERT INTO Movies(Title, CopyrightYear, Lenght, Rating, Notes) VALUES -- Add Ids and insert them in the table
+('Misson Impossible', '1999', 90, 7.5, 'Some notes about the movie ...')
+,('Terminator', '1997', 87, 8, 'Some notes about the movie ...')
+,('Lord of the rings', '1999', 120, 8.2, 'Some notes about the movie ...')
+,('Troy', '2000', 90, 6, 'Some notes about the movie ...')
+,('Game of thrones', '2012', 60, 10, 'Some notes about the movie ...')
