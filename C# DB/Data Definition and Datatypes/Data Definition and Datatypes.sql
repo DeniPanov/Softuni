@@ -179,9 +179,111 @@ INSERT INTO Genres(GenreName, Notes) VALUES
 ,('Musical', 'Some additional notes...')
 ,('Drama', 'Some additional notes...')
 
-INSERT INTO Movies(Title, CopyrightYear, Lenght, Rating, Notes) VALUES -- Add Ids and insert them in the table
-('Misson Impossible', '1999', 90, 7.5, 'Some notes about the movie ...')
-,('Terminator', '1997', 87, 8, 'Some notes about the movie ...')
-,('Lord of the rings', '1999', 120, 8.2, 'Some notes about the movie ...')
-,('Troy', '2000', 90, 6, 'Some notes about the movie ...')
-,('Game of thrones', '2012', 60, 10, 'Some notes about the movie ...')
+INSERT INTO Movies(Title, DirectorId,CopyrightYear, Lenght, GenreId, CategoryId,Rating, Notes) VALUES -- Add Ids and insert them in the table
+('Misson Impossible', 1,'1999', 90, 1, 1, 7.5, 'Some notes about the movie ...')
+,('Terminator', 2, '1997', 87, 1,1, 8, 'Some notes about the movie ...')
+,('Lord of the rings', 3,'1999', 120, 4, 5, 8.2, 'Some notes about the movie ...')
+,('Troy', 4,'2000', 90, 5, 2, 6, 'Some notes about the movie ...')
+,('Game of thrones', 5,'2012', 60, 5,5, 10, 'Some notes about the movie ...')
+
+--Problem 14.	Car Rental Database
+
+CREATE DATABASE CarRental
+
+USE CarRental
+
+CREATE TABLE Categories(
+Id INT PRIMARY KEY IDENTITY
+,CategoryName NVARCHAR (25) NOT NULL
+,DailyRate DECIMAL(7,2) NOT NULL
+,WeeklyRate DECIMAL(8,2) NOT NULL
+,MonthlyRate DECIMAL(9,2) NOT NULL
+,WeekendRate DECIMAL(7,2) NOT NULL
+)
+
+CREATE TABLE Cars(
+Id INT PRIMARY KEY IDENTITY
+,PlateNumber NVARCHAR(15) NOT NULL
+,Manufacturer NVARCHAR(25) NOT NULL
+,Model NVARCHAR(25) NOT NULL
+,CarYear DATE NOT NULL
+,CategoryId INT NOT NULL 
+,Doors INT NOT NULL
+,Picture VARBINARY (MAX)
+,Condition NVARCHAR (20) 
+,Available VARCHAR (10) NOT NULL
+
+CONSTRAINT FK_Cars_Categories FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
+)
+
+CREATE TABLE Employees(
+Id INT PRIMARY KEY IDENTITY
+,FirstName NVARCHAR (20) NOT NULL
+,LastName NVARCHAR (25) NOT NULL
+,Title NVARCHAR (20) NOT NULL
+,Notes NVARCHAR (MAX)
+)
+
+CREATE TABLE Customers(
+Id INT PRIMARY KEY IDENTITY
+,DriverLicenceNumber NVARCHAR(20) NOT NULL
+,FullName NVARCHAR(50) NOT NULL
+,Address NVARCHAR(100) NOT NULL
+,City NVARCHAR(25) NOT NULL
+,ZIPCode INT NOT NULL
+,Notes NVARCHAR(MAX)
+)
+
+CREATE TABLE RentalOrders(
+Id INT PRIMARY KEY IDENTITY
+,EmployeeId INT NOT NULL
+,CustomerId INT NOT NULL
+,CarId INT NOT NULL
+,TankLevel DECIMAL (5,2) NOT NULL
+,KilometrageStart INT NOT NULL
+,KilometrageEnd INT NOT NULL
+,TotalKilometrage INT NOT NULL
+,StartDate DATE NOT NULL
+,EndDate DATE NOT NULL
+,TotalDays INT NOT NULL
+,RateApplied DECIMAL (5,2)
+,TaxRate DECIMAL (8,2) NOT NULL
+,OrderStatus NVARCHAR(20) NOT NULL
+,Notes NVARCHAR(MAX)
+
+CONSTRAINT FK_RentalOrders_Employees FOREIGN KEY (EmployeeId) REFERENCES Employees(Id)
+,CONSTRAINT FK_RentalOrders_Customers FOREIGN KEY (CustomerId) REFERENCES Customers(Id)
+,CONSTRAINT FK_RentalOrders_Cars FOREIGN KEY (CarId) REFERENCES Cars(Id)
+)
+
+INSERT INTO Categories( CategoryName, DailyRate, WeeklyRate, MonthlyRate, WeekendRate) VALUES
+('LIGHT AVOMOBILE', 121.52, 235.25, 526.35, 150.00 ),
+('COMMERCIAL CAR', 121.62, 235.45, 526.75, 151.00 ),
+('CARAVAN', 121.62, 235.45, 526.75, 151.00 )
+
+INSERT INTO Cars ( PlateNumber, Manufacturer, Model, CarYear, CategoryId, Doors, Picture, Condition, Available)VALUES
+('DR2568DE', 'RENO', 'MEGAN' , '2000', 1,4, NULL, NULL, 'YES' ),
+('DR7568DE', 'AUDI', 'X7' , '2000', 1, 4, NULL, NULL, 'YES' ),
+('RR2568DE', 'BMV', 'D5' , '2001', 1, 4, NULL, NULL, 'YES' )
+
+INSERT INTO	Employees (FirstName, LastName, Title, Notes)VALUES
+('Venci','VERCHOV','BDAHDAB', NULL),
+('Deni','PANOV',   'BDAHDAJB', NULL),
+('Sanya', 'PANOVA', 'BDAHDAJB', NULL)
+
+INSERT INTO	Customers ( DriverLicenceNumber, FullName, Address, City, ZIPCode, Notes)VALUES
+('DRS2569SA', 'VENCISLAV VERCHOV', 'BULGARIA', 'SOFIA', 1000, NULL ),
+('DRS2669SA', 'VENCISLAV VERCHOV', 'BULGARIA', 'SOFIA', 1000, NULL ),
+('DRS2579SA', 'VENCISLAV VERCHOV', 'BULGARIA', 'SOFIA', 1000, NULL )
+
+
+INSERT INTO RentalOrders ( EmployeeId, CustomerId, CarId, TankLevel, KilometrageStart, KilometrageEnd,
+ TotalKilometrage, StartDate, EndDate, TotalDays, RateApplied, TaxRate, OrderStatus, Notes)VALUES
+ (1, 2, 4, 60, 0, 200000, 20000, '2000-01-01', '2010-01-01', 3650, 100, 50, 'GOOD', NULL),
+ (2, 2, 5, 60, 120000, 200000, 20000, '2001-01-01', '2011-01-01', 3650, 100, 50, 'GOOD', NULL), 
+ (3, 2, 6, 60, 0, 200000, 20000, '2002-01-01', '2012-01-01', 3650, 100, 50, 'GOOD', NULL) 
+
+ --15. Hotel Database
+
+
+
