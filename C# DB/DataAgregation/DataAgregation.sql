@@ -71,11 +71,33 @@ GROUP BY AgeGroup
 
 --10. First Letter 
 
-SELECT DISTINCT LEFT(FirstName,1) AS FirstLetter
+SELECT DISTINCT LEFT(FirstName, 1) AS FirstLetter
 FROM WizzardDeposits
-WHERE DepositGroup LIKE 'Troll Chest'
+WHERE DepositGroup = 'Troll Chest'
 GROUP BY FirstName
 ORDER BY FirstLetter
+
+--11. Average Interest 
+
+SELECT DepositGroup,IsDepositExpired, AVG(DepositInterest) AS AverageInterest
+FROM WizzardDeposits
+WHERE YEAR(DepositStartDate) >= 1985
+GROUP BY DepositGroup, IsDepositExpired
+ORDER BY DepositGroup DESC, IsDepositExpired
+
+--Problem 12. * Rich Wizard, Poor Wizard
+
+SELECT SUM(w.Difference) as SumDifference
+FROM (
+	  SELECT FirstName as [Host Wizard], DepositAmount as [Host Wizard Deposit]
+	  , LEAD(FirstName) OVER (ORDER BY Id) as [Guest Wizard]
+	  , LEAD(DepositAmount) OVER (ORDER BY Id) as [Guest Wizard Deposit]
+	  , DepositAmount - LEAD(DepositAmount) OVER (ORDER BY Id) as Difference
+	  FROM WizzardDeposits 
+	  ) as w
+
+
+
 
 --Problem 18. *3rd Highest Salary
 
