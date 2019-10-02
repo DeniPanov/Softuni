@@ -96,8 +96,49 @@ FROM (
 	  FROM WizzardDeposits 
 	  ) as w
 
+--Problem 13.	Departments Total Salaries
 
+SELECT DepartmentID, SUM(Salary) as TotalSalary
+FROM Employees
+GROUP BY DepartmentID
 
+--14. Employees Minimum Salaries 
+
+SELECT DepartmentID, MIN(Salary) as MinimumSalary
+FROM Employees
+WHERE DepartmentID IN (2,5,7) AND HireDate > '2000-01-01'
+GROUP BY DepartmentID
+
+--Problem 15.	Employees Average Salaries
+
+SELECT * INTO NewTable
+FROM Employees
+WHERE Salary > 30000
+
+DELETE 
+FROM NewTable
+WHERE ManagerID = 42
+
+UPDATE NewTable
+SET Salary += 5000
+WHERE DepartmentID = 1
+
+SELECT DepartmentID, AVG(Salary) as AverageSalary
+FROM NewTable
+GROUP BY DepartmentID
+
+--16. Employees Maximum Salaries 
+
+SELECT DepartmentID, MAX(Salary) as MaxSalary
+FROM Employees
+GROUP BY DepartmentID
+HAVING MAX(Salary) NOT BETWEEN 30000 AND 70000
+
+--17. Employees Count Salaries 
+
+SELECT COUNT(*) as Count
+FROM Employees
+WHERE ManagerID IS NULL
 
 --Problem 18. *3rd Highest Salary
 
@@ -106,7 +147,7 @@ FROM(
 	SELECT DepartmentID, Salary ,
 	DENSE_RANK() OVER(PARTITION BY DepartmentID ORDER BY Salary DESC) AS Rank
 	FROM Employees
-	) AS MY
+	) AS my
 WHERE RANK = 3 
 
 --19. Salary Challenge
@@ -119,4 +160,3 @@ WHERE Salary >
     FROM Employees AS em
     WHERE e.DepartmentID = em.DepartmentID
 )
-
