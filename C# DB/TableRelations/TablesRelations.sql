@@ -175,3 +175,10 @@ CONSTRAINT PK_Composite_StudentID_SubjectID PRIMARY KEY (StudentID, SubjectID)
 )
 
 --09. *Peaks in Rila 
+
+SELECT m.MountainRange, p.PeakName, p.Elevation
+FROM Peaks as p
+JOIN Mountains as m
+ON p.MountainId = m.Id
+WHERE MountainRange = 'Rila'
+ORDER BY Elevation DESC
