@@ -25,4 +25,41 @@ ON d.DepartmentID = e.DepartmentID
 WHERE d.Name = 'Sales'
 ORDER BY e.EmployeeID
 
+--Problem 4. Employee Departments
 
+SELECT TOP (5) e.EmployeeID, e.FirstName, e.Salary, d.Name
+FROM Employees as e
+JOIN Departments as d
+ON d.DepartmentID = e.DepartmentID
+WHERE e.Salary > 15000
+ORDER BY e.DepartmentID
+
+--Problem 5. Employees Without Project
+
+SELECT TOP (3) e.EmployeeID, e.FirstName
+FROM Employees as e
+LEFT JOIN  EmployeesProjects as ep
+ON ep.EmployeeID = e.EmployeeID
+WHERE ep.ProjectID IS NULL
+ORDER BY e.EmployeeID
+
+--Problem 6. Employees Hired After
+
+SELECT e.FirstName, e.LastName, e.HireDate, d.Name as DeptName
+FROM Employees as e
+JOIN Departments as d
+ON e.DepartmentID = d.DepartmentID AND e.HireDate > '01-01-1999' AND d.Name IN('Sales','Finance')
+ORDER BY e.HireDate
+
+--Problem 7. Employees with Project
+
+SELECT TOP (5) e.EmployeeID, e.FirstName, p.Name
+FROM Employees as e
+JOIN EmployeesProjects as ep
+ON e.EmployeeID = ep.EmployeeID
+JOIN Projects as p
+ON ep.ProjectID = p.ProjectID
+WHERE p.StartDate > '08-13-2002' AND p.EndDate IS NULL
+ORDER BY e.EmployeeID
+
+--Problem 8. Employee 24
