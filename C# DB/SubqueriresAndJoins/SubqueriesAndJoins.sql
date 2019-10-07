@@ -63,3 +63,15 @@ WHERE p.StartDate > '08-13-2002' AND p.EndDate IS NULL
 ORDER BY e.EmployeeID
 
 --Problem 8. Employee 24
+
+SELECT e.EmployeeID, e.FirstName,
+CASE 
+	WHEN YEAR(p.StartDate) >= 2005 THEN NULL
+	ELSE p.Name
+END as ProjectName
+FROM Employees as e
+JOIN EmployeesProjects as ep
+ON ep.EmployeeID = e.EmployeeID
+RIGHT JOIN Projects as p
+ON p.ProjectID = ep.ProjectID
+WHERE e.EmployeeID = 24 
