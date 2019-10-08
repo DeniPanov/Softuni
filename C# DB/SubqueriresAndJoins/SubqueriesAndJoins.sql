@@ -75,3 +75,14 @@ ON ep.EmployeeID = e.EmployeeID
 RIGHT JOIN Projects as p
 ON p.ProjectID = ep.ProjectID
 WHERE e.EmployeeID = 24 
+
+--Problem 9. Employee Manager
+
+SELECT e.EmployeeID, e.FirstName, m.EmployeeID, m.FirstName
+FROM Employees as e
+JOIN Employees as m
+ON m.EmployeeID =  e.ManagerID
+WHERE e.ManagerID IN(3,7)
+ORDER BY e.EmployeeID
+
+--Problem 10. Employee Summary
