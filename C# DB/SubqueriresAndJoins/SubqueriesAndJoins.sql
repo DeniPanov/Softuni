@@ -135,3 +135,21 @@ GROUP BY c.CountryCode
 
 -- 14. Countries With or Without Rivers 
 
+SELECT TOP (5) c.CountryName, r.RiverName
+FROM Countries as c
+LEFT JOIN CountriesRivers as cr
+ON cr.CountryCode = c.CountryCode
+LEFT JOIN Rivers as r
+ON r.Id = cr.RiverId
+WHERE c.ContinentCode = 'AF'
+ORDER BY c.CountryName
+
+--Problem 15. *Continents and Currencies NOT FINISHED
+
+SELECT cnt.ContinentCode
+	--, c.CurrencyCode
+	,COUNT(c.CurrencyCode) as CurrencyUsage
+FROM Continents as cnt
+JOIN Countries as c
+ON c.ContinentCode = cnt.ContinentCode
+GROUP BY cnt.ContinentCode
