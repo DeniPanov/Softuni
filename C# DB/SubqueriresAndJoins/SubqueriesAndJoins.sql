@@ -109,3 +109,29 @@ GROUP BY DepartmentID
 ) as mas
 
 --Problem 12. Highest Peaks in Bulgaria
+
+SELECT c.CountryCode, m.MountainRange, p.PeakName, p.Elevation
+FROM Countries as c
+JOIN MountainsCountries as mc
+ON mc.CountryCode = c.CountryCode
+JOIN Mountains as m
+ON m.Id = mc.MountainId
+JOIN Peaks as p
+ON p.MountainId = m.Id
+WHERE c.CountryCode = 'BG' AND p.Elevation > 2835
+ORDER BY p.Elevation DESC
+
+--13. Count Mountain Ranges 
+
+SELECT c.CountryCode, 
+	COUNT(m.MountainRange) as MountainRanges
+FROM Countries as c
+JOIN MountainsCountries as mc
+ON mc.CountryCode = c.CountryCode
+JOIN Mountains as m
+ON m.Id = mc.MountainId
+WHERE c.CountryCode IN('BG', 'RU', 'US')
+GROUP BY c.CountryCode
+
+-- 14. Countries With or Without Rivers 
+
