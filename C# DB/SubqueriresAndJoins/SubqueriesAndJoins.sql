@@ -153,3 +153,34 @@ FROM Continents as cnt
 JOIN Countries as c
 ON c.ContinentCode = cnt.ContinentCode
 GROUP BY cnt.ContinentCode
+
+--Problem 16. Countries without any Mountains
+
+SELECT COUNT(*) as Count
+FROM
+(
+SELECT c.CountryCode, m.MountainRange
+FROM Countries as c
+LEFT JOIN MountainsCountries as mc
+ON mc.CountryCode = c.CountryCode
+LEFT JOIN Mountains as m
+ON m.Id = mc.MountainId
+) as sq
+WHERE sq.MountainRange IS NULL
+
+--Problem 17. Highest Peak and Longest River by Country NOT FINISHED
+
+SELECT   c.CountryName
+		, p.Elevation
+		, r.Length
+FROM Countries as c
+JOIN CountriesRivers as cr
+ON cr.CountryCode = c.CountryCode
+JOIN Rivers as r
+ON r.Id = cr.RiverId
+JOIN MountainsCountries as mc
+ON mc.CountryCode = c.CountryCode
+JOIN Mountains as m
+ON m.Id = mc.MountainId
+JOIN Peaks as p
+ON p.MountainId = m.Id
