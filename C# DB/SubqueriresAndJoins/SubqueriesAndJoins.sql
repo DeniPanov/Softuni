@@ -86,3 +86,26 @@ WHERE e.ManagerID IN(3,7)
 ORDER BY e.EmployeeID
 
 --Problem 10. Employee Summary
+
+SELECT TOP (50) e.EmployeeID,
+	CONCAT(e.FirstName,' ',e.LastName) as EmployeeName,
+	CONCAT(m.FirstName,' ',m.LastName) as ManagerName,
+	d.Name as DepartmentName
+FROM Employees as e
+JOIN Employees as m
+ON m.EmployeeID = e.ManagerID
+JOIN Departments as d
+ON d.DepartmentID = e.DepartmentID
+ORDER BY e.EmployeeID
+
+--Problem 11. Min Average Salary
+
+SELECT MIN(mas.AverageSalary) as MinAverageSalary
+FROM
+(
+SELECT AVG(Salary) as AverageSalary
+FROM Employees
+GROUP BY DepartmentID
+) as mas
+
+--Problem 12. Highest Peaks in Bulgaria
