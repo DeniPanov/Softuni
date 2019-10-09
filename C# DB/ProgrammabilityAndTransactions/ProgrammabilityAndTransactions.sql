@@ -23,3 +23,35 @@ GO
 
 --Problem 3. Town Names Starting With
 
+CREATE PROC usp_GetTownsStartingWith (@startingSymbols NVARCHAR(50))
+AS
+	SELECT t.Name
+	FROM Towns as t
+	WHERE LEFT(t.Name, LEN(@startingSymbols)) = @startingSymbols
+
+GO 
+
+EXEC usp_GetTownsStartingWith b
+
+GO
+
+--Problem 4. Employees from Town
+
+CREATE PROC usp_GetEmployeesFromTown (@townName NVARCHAR(30))
+AS
+	SELECT e.FirstName, e.LastName
+	FROM Employees as e
+	JOIN Addresses as a
+	ON a.AddressID = e.AddressID
+	JOIN Towns as t 
+	ON t.TownID = a.TownID
+	WHERE t.Name = @townName
+
+GO
+
+EXEC usp_GetEmployeesFromTown Sofia
+
+GO
+
+--Problem 5. Salary Level Function
+
