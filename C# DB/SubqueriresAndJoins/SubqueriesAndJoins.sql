@@ -168,19 +168,21 @@ ON m.Id = mc.MountainId
 ) as sq
 WHERE sq.MountainRange IS NULL
 
---Problem 17. Highest Peak and Longest River by Country NOT FINISHED
+--Problem 17. Highest Peak and Longest River by Country
 
-SELECT   c.CountryName
-		, p.Elevation
-		, r.Length
+SELECT TOP (5)  c.CountryName
+		, MAX(p.Elevation) as HighestPeakElevation
+		, MAX(r.Length) as LongestRiverLength
 FROM Countries as c
-JOIN CountriesRivers as cr
+FULL JOIN CountriesRivers as cr
 ON cr.CountryCode = c.CountryCode
-JOIN Rivers as r
+FULL JOIN Rivers as r
 ON r.Id = cr.RiverId
-JOIN MountainsCountries as mc
+FULL JOIN MountainsCountries as mc
 ON mc.CountryCode = c.CountryCode
-JOIN Mountains as m
+FULL JOIN Mountains as m
 ON m.Id = mc.MountainId
-JOIN Peaks as p
+FULL JOIN Peaks as p
 ON p.MountainId = m.Id
+GROUP BY c.CountryName
+ORDER BY HighestPeakElevation DESC, LongestRiverLength DESC
