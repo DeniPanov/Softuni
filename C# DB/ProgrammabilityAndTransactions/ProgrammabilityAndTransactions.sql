@@ -55,3 +55,38 @@ GO
 
 --Problem 5. Salary Level Function
 
+CREATE FUNCTION ufn_GetSalaryLevel(@salary DECIMAL(18,4))
+RETURNS NVARCHAR(20)
+AS
+BEGIN
+	DECLARE @result NVARCHAR(20)
+
+	IF(@salary < 30000)
+	BEGIN
+		SET @result = 'Low'
+	END
+
+	ELSE IF(@salary <= 50000)
+	BEGIN
+		SET @result = 'Average'
+	END
+
+	ELSE
+	SET @result = 'High'
+
+	RETURN @result
+END
+
+GO
+
+SELECT Salary, dbo.ufn_GetSalaryLevel(Salary) as SalaryLevel
+FROM Employees
+
+GO
+
+--Problem 6. Employees by Salary Level NOT FINISHED
+
+CREATE PROC usp_EmployeesBySalaryLevel (dbo.ufn_GetSalaryLevel(@Salary) NVARCHAR(20))
+AS
+	SELECT e.FirstName, e.LastName
+	FROM Employees as e
