@@ -84,9 +84,18 @@ FROM Employees
 
 GO
 
---Problem 6. Employees by Salary Level NOT FINISHED
+--Problem 6. Employees by Salary Level 
 
-CREATE PROC usp_EmployeesBySalaryLevel (dbo.ufn_GetSalaryLevel(@Salary) NVARCHAR(20))
+CREATE PROC usp_EmployeesBySalaryLevel (@salaryLevel NVARCHAR(20))
 AS
+BEGIN
 	SELECT e.FirstName, e.LastName
 	FROM Employees as e
+	WHERE dbo.ufn_GetSalaryLevel(e.Salary) = @salaryLevel
+END
+
+GO
+
+EXEC usp_EmployeesBySalaryLevel 'High'
+
+--Problem 7. Define Function
