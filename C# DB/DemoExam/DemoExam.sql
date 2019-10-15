@@ -105,12 +105,14 @@ ORDER BY i.Id DESC, IssueAssignee
 
 --p08 NOT FINISHED!
 
-SELECT Id
-	,Name
-	,CONCAT(Size, 'KB') as Size
-FROM Files
-WHERE ParentId <> Id
-ORDER BY Id, Name, Size DESC
+SELECT f.Id
+	,f.Name
+	,CONCAT(f.Size, 'KB') as Size
+FROM Files as f
+LEFT JOIN Files as p
+ON p.ParentId = f.Id
+WHERE p.Id IS NULL 
+ORDER BY f.Id, f.Name, Size DESC
 
 
 --p09 NOT FINISHED!
