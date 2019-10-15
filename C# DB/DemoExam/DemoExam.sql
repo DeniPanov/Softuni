@@ -103,7 +103,7 @@ ON u.Id = i.AssigneeId
 WHERE u.Id = i.AssigneeId
 ORDER BY i.Id DESC, IssueAssignee
 
---p08 NOT FINISHED!
+--p08
 
 SELECT f.Id
 	,f.Name
@@ -115,33 +115,16 @@ WHERE p.Id IS NULL
 ORDER BY f.Id, f.Name, Size DESC
 
 
---p09 NOT FINISHED!
+--p09 
 
-SELECT TOP (5) Id, Name, COUNT(
-									SELECT COUNT(*)
-									FROM Commits as c
-									JOIN Files as f
-									ON f.CommitId = c.Id
-									JOIN Repositories as r
-									ON r.Id = c.RepositoryId
-									WHERE r.Id = c.RepositoryId 
-									) 
-FROM Repositories 
-JOIN Commits as c
-ON c.RepositoryId = r.Id
-GROUP BY r.Id,r.Name
-ORDER BY Commits DESC, r.Id, r.Name
-
-SELECT TOP (5) r.Id, r.Name, COUNT(f.CommitId) as Commits
+SELECT TOP (5) r.Id, r.Name, COUNT(c.ContributorId) as Commits
 FROM Repositories as r
+JOIN RepositoriesContributors as rc
+ON rc.RepositoryId = r.Id
 JOIN Commits as c
 ON c.RepositoryId = r.Id
-JOIN Files as f
-ON f.CommitId = c.Id
 GROUP BY r.Id,r.Name
 ORDER BY Commits DESC, r.Id, r.Name
-
---WHERE r.Name = 'WorkWork'
 
 --p10
 
