@@ -71,14 +71,12 @@ WHERE AssigneeId = 6
 DELETE RepositoriesContributors
 WHERE RepositoryId = 3
 
---ALTER TABLE RepositoriesContributors
---DROP CONSTRAINT [FK__Repositor__Contr__4E88ABD4]
-
---ALTER TABLE RepositoriesContributors
---DROP CONSTRAINT [FK__Repositor__Repos__4D94879B]
-
-DELETE Repositories
-WHERE Name = 'Softuni-Teamwork'
+DELETE FROM Issues
+WHERE RepositoryId IN (
+					   SELECT r.Id
+	                   FROM Repositories AS r
+					   WHERE r.[Name] = 'Softuni-Teamwork'
+					   )
 
 --p05
 
