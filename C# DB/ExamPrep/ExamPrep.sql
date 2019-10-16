@@ -76,3 +76,15 @@ SET Grade = 6
 WHERE SubjectId IN (1,2) AND Grade >= 5.50
 
 --p04
+
+DELETE StudentsTeachers
+WHERE TeacherId IN (
+					SELECT Id
+					FROM Teachers
+					WHERE Phone LIKE '%72%'
+					)
+
+DELETE Teachers
+WHERE Phone LIKE '%72%'
+
+--p05
