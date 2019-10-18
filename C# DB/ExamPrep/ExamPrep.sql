@@ -104,3 +104,20 @@ GROUP BY s.FirstName, s.LastName
 
 --p07
 
+SELECT CONCAT(s.FirstName,' ', s.LastName) as [Full Name]
+FROM Students as s
+LEFT JOIN StudentsExams as se
+ON se.StudentId = s.Id
+WHERE se.ExamId IS NULL
+ORDER BY [Full Name]
+
+--p08
+
+SELECT TOP(10) s.FirstName, s.LastName, CAST(AVG(se.Grade) as DECIMAL(3,2)) as Grade
+FROM Students as s
+LEFT JOIN StudentsExams as se
+ON se.StudentId = s.Id
+GROUP BY s.FirstName, s.LastName
+ORDER BY Grade DESC, s.FirstName, s.LastName
+
+--p09
