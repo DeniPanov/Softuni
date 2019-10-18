@@ -121,3 +121,21 @@ GROUP BY s.FirstName, s.LastName
 ORDER BY Grade DESC, s.FirstName, s.LastName
 
 --p09
+
+SELECT CONCAT(s.FirstName, ' ', s.MiddleName + ' ', s.LastName) as [Full Name]
+FROM Students as s
+LEFT JOIN StudentsSubjects as ss
+ON ss.StudentId = s.Id
+WHERE ss.SubjectId IS NULL
+ORDER BY [Full Name]
+
+--p10
+
+SELECT s.Name, AVG(ss.Grade) as AverageGrade
+FROM Subjects as s
+JOIN StudentsSubjects as ss
+ON ss.SubjectId = s.Id
+GROUP BY s.Name, s.Id
+ORDER BY s.Id
+
+--p11
