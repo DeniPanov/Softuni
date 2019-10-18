@@ -139,3 +139,33 @@ GROUP BY s.Name, s.Id
 ORDER BY s.Id
 
 --p11
+
+GO
+
+CREATE FUNCTION udf_ExamGradesToUpdate(@studentId INT, @grade DECIMAL(3,2))
+RETURNS NVARCHAR(100)
+BEGIN
+	DECLARE @GradeCountPerStudent INT = (SELECT TOP (1) COUNT(Grade)
+										 FROM StudentsExams
+										 WHERE StudentId = @studentId AND (Grade > @grade AND Grade <= @grade + 0.5))
+
+
+	DECLARE @StudentName NVARCHAR(30) = (SELECT FirstName
+										 FROM Students
+										 WHERE Id = @studentId)
+	
+	IF(@StudentName IS NULL)
+	BEGIN
+		RETURN 'The student with provided id does not exist in the school!'
+	END
+
+	IF(@grade > 6)
+	BEGIN
+		RETURN 'Grade cannot be above 6.00!'
+	END
+
+	RETURN CONCAT('You have to update ', @GradeCountPerStudent , ' grades for the student ', @StudentName)
+
+END
+
+GO
