@@ -88,3 +88,19 @@ DELETE Teachers
 WHERE Phone LIKE '%72%'
 
 --p05
+
+SELECT FirstName, LastName, Age
+FROM Students
+WHERE Age >= 12
+ORDER BY FirstName, LastName
+
+--p06
+
+SELECT s.FirstName, s. LastName, COUNT(st.TeacherId) as TeachersCount
+FROM Students as s
+JOIN StudentsTeachers as st
+ON st.StudentId = s.Id
+GROUP BY s.FirstName, s.LastName
+
+--p07
+
