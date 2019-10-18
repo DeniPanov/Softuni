@@ -169,3 +169,35 @@ BEGIN
 END
 
 GO
+
+--p12
+
+CREATE PROC usp_ExcludeFromSchool(@StudentId INT)
+AS
+BEGIN
+
+	DECLARE @isValid BIT = (SELECT COUNT(Id)
+						   FROM Students
+						   WHERE Id = @StudentId)
+
+	IF(@isValid = 0)
+	BEGIN
+		RAISERROR ('This school has no student with the provided id!',16,1)
+	END
+
+	DELETE FROM StudentsExams
+	WHERE StudentId = @StudentId
+
+	DELETE FROM StudentsSubjects
+	WHERE StudentId = @StudentId
+
+	DELETE FROM StudentsTeachers
+	WHERE StudentId = @StudentId
+
+	DELETE FROM Students
+	WHERE Id = @StudentId
+END
+
+GO
+
+EXEC usp_ExcludeFromSchool 301
