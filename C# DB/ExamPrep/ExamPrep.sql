@@ -2,7 +2,7 @@ CREATE DATABASE School
 
 USE School
 
---p01
+--p01 DDL
 
 CREATE TABLE Students(
 Id INT PRIMARY KEY IDENTITY
