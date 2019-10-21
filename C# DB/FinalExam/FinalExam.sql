@@ -172,26 +172,39 @@ END
 
 GO
 
---p12 NOT FINISHED!
+--p12
 
 CREATE PROC usp_AssignEmployeeToReport(@EmployeeId INT, @ReportId INT) 
 AS
 
-	DECLARE @validInput INT = (SELECT e.Id
-							   FROM Employees as e
-							   JOIN Reports as r
-							   ON r.EmployeeId = e.Id
-							   JOIN Categories as c
-							   ON r.CategoryId = c.Id
-							   WHERE @EmployeeId = e.Id AND @ReportId = r.Id AND
-							   e.DepartmentId = c.DepartmentId)
+	DECLARE @reportDepartment INT = (
+			 SELECT D.Id
+			 FROM Reports R
+			 JOIN Categories C ON C.Id = R.CategoryId
+			 JOIN Departments D ON D.Id = C.DepartmentId
+			 WHERE R.Id = @ReportId
+			 )
 
-	DECLARE @errorMsg NVARCHAR(200) = CONCAT('Employee doesn', CHAR(39), 't belong to the appropriate department!')
+			 DECLARE @employeeDepartment INT = (
+			 SELECT D.Id
+			 FROM Employees E
+			 JOIN Departments D ON D.Id = E.DepartmentId
+			 WHERE E.Id = @EmployeeId
+			 )
 
-	IF(@validInput IS NULL)
+	IF (@reportDepartment != @employeeDepartment)
 	BEGIN
-		RAISERROR(@errorMsg, 16, 1)
+		RAISERROR('Employee doesn''t belong to the appropriate department!' , 16, 1)
+		RETURN
 	END
+			UPDATE Reports
+			SET EmployeeId = @EmployeeId
+			WHERE ID = @ReportId
+
+
+UPDATE Reports
+SET EmployeeId = 2
+WHERE ID = 1
 
 GO 
 
