@@ -12,7 +12,7 @@
         {
             var context = new SoftUniContext();
 
-            string result = GetEmployeesFullInformation(context);
+            string result = GetEmployeesWithSalaryOver50000(context);
 
             Console.WriteLine(result);
         }
@@ -38,6 +38,29 @@
             foreach (var e in employees)
             {
                 result.AppendLine($"{e.FirstName} {e.LastName} {e.MiddleName} {e.JobTitle} {e.Salary:f2}");
+            }
+
+            return result.ToString().TrimEnd();
+        }
+
+        //p04 - Employees with Salary Over 50 000
+        public static string GetEmployeesWithSalaryOver50000(SoftUniContext context)
+        {
+            var empsWithSalaryOver50000 = context
+                .Employees
+                .OrderBy(e => e.FirstName)
+                .Select(e => new
+                {
+                    e.FirstName,
+                    e.Salary
+                })
+                .Where(e => e.Salary > 50000);
+
+            var result = new StringBuilder();
+
+            foreach (var e in empsWithSalaryOver50000)
+            {
+                result.AppendLine($"{e.FirstName} - {e.Salary:f2}");
             }
 
             return result.ToString().TrimEnd();
