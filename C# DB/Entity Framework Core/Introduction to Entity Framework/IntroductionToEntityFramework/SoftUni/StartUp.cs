@@ -5,6 +5,7 @@
     using System.Linq;
 
     using SoftUni.Data;
+    using SoftUni.Models;
 
     public class StartUp
     {
@@ -12,7 +13,7 @@
         {
             var context = new SoftUniContext();
 
-            string result = GetEmployeesFromResearchAndDevelopment(context);
+            string result = AddNewAddressToEmployee(context);
 
             Console.WriteLine(result);
         }
@@ -91,5 +92,46 @@
 
             return result.ToString().TrimEnd();
         }
+
+        //p06 - Adding a New Address and Updating Employee
+        public static string AddNewAddressToEmployee(SoftUniContext context)
+        {
+            Address address = new Address
+            {
+                AddressText = "Vitoshka 15",
+                TownId = 4
+            };
+
+            context.Addresses.Add(address);
+
+
+            Employee nakov = context
+                .Employees
+                .First(e => e.LastName == "Nakov");
+
+            nakov.Address = address;
+
+            context.SaveChanges();
+
+            var addresses = context
+                .Employees
+                .OrderByDescending(e => e.AddressId)
+                .Select(e => new
+                {
+                    e.Address.AddressText
+                })
+                .Take(10)
+                .ToList();
+
+            var result = new StringBuilder();
+
+            foreach (var a in addresses)
+            {
+                result.AppendLine(a.AddressText);
+            }
+
+            return result.ToString().TrimEnd();
+        }
+
     }
 }
