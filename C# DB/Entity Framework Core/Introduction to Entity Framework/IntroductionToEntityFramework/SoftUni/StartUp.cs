@@ -13,7 +13,7 @@
         {
             var context = new SoftUniContext();
 
-            string result = GetDepartmentsWithMoreThan5Employees(context);
+            string result = GetLatestProjects(context);
 
             Console.WriteLine(result);
         }
@@ -266,6 +266,36 @@
                 {
                     result.AppendLine($"{e.EmployeeFirstName} {e.EmployeeLastName} - {e.JobTitle}");
                 }
+            }
+
+            return result.ToString().TrimEnd();
+        }
+
+        //p11 - Find Latest 10 Projects
+        public static string GetLatestProjects(SoftUniContext context)
+        {
+            string dateFormat = "M/d/yyyy h:mm:ss tt";
+
+            var last10projects = context
+                .Projects
+                .OrderByDescending(p => p.StartDate)
+                .Take(10)
+                .OrderBy(p => p.Name)
+                .Select(p => new
+                {
+                    p.Name,
+                    p.Description,
+                    StartDate = p.StartDate.ToString(dateFormat)
+                })
+                .ToList();
+
+            var result = new StringBuilder();
+
+            foreach (var p in last10projects)
+            {
+                result.AppendLine(p.Name)
+                    .AppendLine(p.Description)
+                    .AppendLine(p.StartDate);               
             }
 
             return result.ToString().TrimEnd();
