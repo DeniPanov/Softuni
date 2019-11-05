@@ -6,6 +6,7 @@
 
     using SoftUni.Data;
     using SoftUni.Models;
+    using System.Globalization;
 
     public class StartUp
     {
@@ -13,7 +14,7 @@
         {
             var context = new SoftUniContext();
 
-            string result = AddNewAddressToEmployee(context);
+            string result = GetEmployeesInPeriod(context);
 
             Console.WriteLine(result);
         }
@@ -133,5 +134,47 @@
             return result.ToString().TrimEnd();
         }
 
+        //p07 - Employees and Projects
+        public static string GetEmployeesInPeriod(SoftUniContext context)
+        {
+            var employees = context
+                .Employees
+                .Where(e => e.EmployeesProjects
+                .Any(ep => ep.Project.StartDate.Year >= 2001 && ep.Project.StartDate.Year <= 2003))
+                .Select(e => new
+                {
+                    e.FirstName,
+                    e.LastName,
+                    ManagerFirstName = e.Manager.FirstName,
+                    ManagerLastName = e.Manager.LastName,
+                    Projects = e.EmployeesProjects.Select(ep => new
+                    {
+                        ProjectName = ep.Project.Name,
+                        ProjectStartDate = ep.Project.StartDate,
+                        ProjectEndDate = ep.Project.EndDate
+                    })
+                })
+                .Take(10);
+
+            var result = new StringBuilder();
+
+            foreach (var employee in employees)
+            {
+                result.AppendLine($"{employee.FirstName} {employee.LastName} - Manager: {employee.ManagerFirstName} {employee.ManagerLastName}");
+
+                foreach (var project in employee.Projects)
+                {
+                    string startDate = project.ProjectStartDate.ToString("M/d/yyyy h:mm:ss tt");
+                    string endDate = project.ProjectEndDate.HasValue 
+                        ? project.ProjectEndDate.Value.ToString("M/d/yyyy h:mm:ss tt") 
+                        : "not finished";
+
+                    result.AppendLine($"--{project.ProjectName} - {startDate} - {endDate}");
+                }
+            }
+            return result.ToString().TrimEnd();
+        }
+
+        //p08 - 
     }
 }
