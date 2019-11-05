@@ -6,7 +6,6 @@
 
     using SoftUni.Data;
     using SoftUni.Models;
-    using System.Globalization;
 
     public class StartUp
     {
@@ -14,7 +13,7 @@
         {
             var context = new SoftUniContext();
 
-            string result = GetEmployeesInPeriod(context);
+            string result = GetAddressesByTown(context);
 
             Console.WriteLine(result);
         }
@@ -165,8 +164,8 @@
                 foreach (var project in employee.Projects)
                 {
                     string startDate = project.ProjectStartDate.ToString("M/d/yyyy h:mm:ss tt");
-                    string endDate = project.ProjectEndDate.HasValue 
-                        ? project.ProjectEndDate.Value.ToString("M/d/yyyy h:mm:ss tt") 
+                    string endDate = project.ProjectEndDate.HasValue
+                        ? project.ProjectEndDate.Value.ToString("M/d/yyyy h:mm:ss tt")
                         : "not finished";
 
                     result.AppendLine($"--{project.ProjectName} - {startDate} - {endDate}");
@@ -175,6 +174,33 @@
             return result.ToString().TrimEnd();
         }
 
-        //p08 - 
+        //p08 - Addresses by Town
+        public static string GetAddressesByTown(SoftUniContext context)
+        {
+            var addressesByTown = context
+                .Addresses
+                .OrderByDescending(a => a.Employees.Count)
+                    .ThenBy(a => a.Town.Name)
+                    .ThenBy(a => a.AddressText)
+                    .Take(10)
+                .Select(t => new
+                {
+                    t.AddressText,
+                    TownName = t.Town.Name,
+                    EmployeesCount = t.Employees.Count()
+                })
+                .ToList();
+
+            var result = new StringBuilder();
+
+            foreach (var a in addressesByTown)
+            {
+                result.AppendLine($"{a.AddressText}, {a.TownName} - {a.EmployeesCount} employees");
+            }
+
+            return result.ToString().TrimEnd();
+        }
+
+        //p09 - Employee 147
     }
 }
