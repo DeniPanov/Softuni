@@ -13,7 +13,7 @@
         {
             var context = new SoftUniContext();
 
-            string result = GetEmployeesByFirstNameStartingWithSa(context);
+            string result = RemoveTown(context);
 
             Console.WriteLine(result);
         }
@@ -351,5 +351,75 @@
 
             return result.ToString().TrimEnd();
         }
+
+        //p14 - Delete Project by Id
+        public static string DeleteProjectById(SoftUniContext context)
+        {
+            Project projectToDelete = context
+                .Projects.Find(2);
+
+            var projectFromMappingTable = context
+                .EmployeesProjects
+                .Where(p => p.ProjectId == 2);
+
+            foreach (var p in projectFromMappingTable)
+            {
+                context.EmployeesProjects.Remove(p);
+            }
+
+            context.Projects.Remove(projectToDelete);
+
+            context.SaveChanges();
+
+            var projects = context
+                .Projects
+                .Take(10)
+                .Select(p => new
+                {
+                    ProjectName = p.Name
+                })
+                .ToList();
+
+            var result = new StringBuilder();
+
+            foreach (var p in projects)
+            {
+                result.AppendLine(p.ProjectName);
+            }
+
+            return result.ToString().TrimEnd();
+        }
+
+        //p15 - Remove Town
+        public static string RemoveTown(SoftUniContext context)
+        {
+            StringBuilder result = new StringBuilder();
+
+            string townName = "Seattle";
+
+            context.Employees
+                .Where(e => e.Address.Town.Name == townName)
+                .ToList()
+                .ForEach(e => e.AddressId = null);
+
+            int addressesCount = context.Addresses
+                .Where(a => a.Town.Name == townName)
+                .Count();
+
+            context.Addresses
+                .Where(a => a.Town.Name == townName)
+                .ToList()
+                .ForEach(a => context.Addresses.Remove(a));
+
+            context.Towns
+                .Remove(context.Towns
+                    .SingleOrDefault(t => t.Name == townName));
+
+            context.SaveChanges();
+
+            result.AppendLine($"{addressesCount} {(addressesCount == 1 ? "address" : "addresses")} in {townName} {(addressesCount == 1 ? "was" : "were")} deleted");
+
+            return result.ToString().TrimEnd();
+            }
+        }
     }
-}
