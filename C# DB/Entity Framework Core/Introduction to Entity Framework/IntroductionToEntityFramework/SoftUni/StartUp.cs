@@ -13,7 +13,7 @@
         {
             var context = new SoftUniContext();
 
-            string result = GetEmployee147(context);
+            string result = GetDepartmentsWithMoreThan5Employees(context);
 
             Console.WriteLine(result);
         }
@@ -228,6 +228,43 @@
                 foreach (var p in e.Projects)
                 {
                     result.AppendLine($"{p.ProjectName}");
+                }
+            }
+
+            return result.ToString().TrimEnd();
+        }
+
+        //p10 - Departments with More Than 5 Employees
+        public static string GetDepartmentsWithMoreThan5Employees(SoftUniContext context)
+        {
+            var departments = context
+                .Departments
+                .Where(d => d.Employees.Count > 5)
+                .OrderBy(e => e.Employees.Count)
+                .ThenBy(d => d.Name)
+                .Select(d => new
+                {
+                    DepartmentName = d.Name,
+                    ManagerFirstName = d.Manager.FirstName,
+                    ManagerLastName = d.Manager.LastName,
+                    Employees = d.Employees.Select(e => new
+                    {
+                        EmployeeFirstName = e.FirstName,
+                        EmployeeLastName = e.LastName,
+                        e.JobTitle
+                    })
+                })
+                .ToList();
+
+            var result = new StringBuilder();
+
+            foreach (var d in departments)
+            {
+                result.AppendLine($"{d.DepartmentName} – {d.ManagerFirstName} {d.ManagerLastName}");
+
+                foreach (var e in d.Employees)
+                {
+                    result.AppendLine($"{e.EmployeeFirstName} {e.EmployeeLastName} - {e.JobTitle}");
                 }
             }
 
