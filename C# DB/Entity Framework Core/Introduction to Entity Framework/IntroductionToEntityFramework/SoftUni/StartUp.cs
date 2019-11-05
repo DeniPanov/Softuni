@@ -13,7 +13,7 @@
         {
             var context = new SoftUniContext();
 
-            string result = GetLatestProjects(context);
+            string result = IncreaseSalaries(context);
 
             Console.WriteLine(result);
         }
@@ -295,7 +295,31 @@
             {
                 result.AppendLine(p.Name)
                     .AppendLine(p.Description)
-                    .AppendLine(p.StartDate);               
+                    .AppendLine(p.StartDate);
+            }
+
+            return result.ToString().TrimEnd();
+        }
+
+        //p12 - Increase Salaries                                                  
+        public static string IncreaseSalaries(SoftUniContext context)
+        {
+            var luckyEmployees = context
+                .Employees
+                .Where(d => d.Department.Name == "Engineering"
+                         || d.Department.Name == "Tool Design"
+                         || d.Department.Name == "Marketing"
+                         || d.Department.Name == "Information Services")
+                .OrderBy(e => e.FirstName)
+                .ThenBy(e => e.LastName);
+ 
+            var result = new StringBuilder();
+
+            foreach (var l in luckyEmployees)
+            {
+                l.Salary *= 1.12m;
+
+                result.AppendLine($"{l.FirstName} {l.LastName} (${l.Salary:f2})");
             }
 
             return result.ToString().TrimEnd();
