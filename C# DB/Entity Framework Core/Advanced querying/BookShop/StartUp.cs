@@ -15,14 +15,15 @@
             {
                 //DbInitializer.ResetDatabase(db);
 
-                string input = Console.ReadLine();
+                //string input = Console.ReadLine();
 
-                string result = GetBooksByAgeRestriction(db, input);
+                string result = GetGoldenBooks(db);
 
                 Console.WriteLine(result);
             }
         }
 
+        //p01 - Age Restriction
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
         {
             var books = context
@@ -34,5 +35,20 @@
 
             return string.Join(Environment.NewLine, books);
         }
+
+        //p02 - Golden Books
+
+        public static string GetGoldenBooks(BookShopContext context)
+        {
+            var goldenBooks = context
+                .Books
+                .OrderBy(b => b.BookId)
+                .Where(b => b.EditionType.ToString().ToLower() == "gold" && b.Copies < 5000)
+                .Select(b => b.Title)
+                .ToList();
+
+            return string.Join(Environment.NewLine, goldenBooks);
+        }
+
     }
 }
