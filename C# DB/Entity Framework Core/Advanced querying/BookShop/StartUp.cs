@@ -17,7 +17,7 @@
 
                 //string input = Console.ReadLine();
 
-                string result = GetGoldenBooks(db);
+                string result = GetBooksByPrice(db);
 
                 Console.WriteLine(result);
             }
@@ -49,6 +49,33 @@
 
             return string.Join(Environment.NewLine, goldenBooks);
         }
+
+        //p03 - Books by Price
+
+        public static string GetBooksByPrice(BookShopContext context)
+        {
+            var booksByPrice = context
+                .Books
+                .Where(b => b.Price > 40)
+                .Select(b => new
+                {
+                    b.Title,
+                    b.Price
+                })
+                .OrderByDescending(b => b.Price)
+                .ToList();
+
+            var result = new StringBuilder();
+
+            foreach (var b in booksByPrice)
+            {
+                result.AppendLine($"{b.Title} - ${b.Price:f2}");
+            }
+
+            return result.ToString().TrimEnd();
+        }
+
+
 
     }
 }
