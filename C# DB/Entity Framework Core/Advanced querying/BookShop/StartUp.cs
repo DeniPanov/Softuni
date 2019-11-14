@@ -1,9 +1,10 @@
 ﻿namespace BookShop
 {
     using System;
-    using System.Globalization;
     using System.Linq;
     using System.Text;
+    using System.Globalization;
+    using System.Collections.Generic;
 
     using Data;
     using Initializer;
@@ -16,9 +17,9 @@
             {
                 //DbInitializer.ResetDatabase(db);
 
-                int year = int.Parse(Console.ReadLine());
+                string input = Console.ReadLine();
 
-                string result = GetBooksNotReleasedIn(db, year);
+                string result = GetBooksByCategory(db, input);
 
                 Console.WriteLine(result);
             }
@@ -87,6 +88,33 @@
                 .ToList();
 
             return string.Join(Environment.NewLine, notReleasedBooks);
+        }
+
+        //p05 - Book Titles by Category
+        public static string GetBooksByCategory(BookShopContext context, string input)
+        {
+           List<string> bookCategoriesInput = input
+                .Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
+
+            var booksToAdd = new List<string>();
+
+            foreach (var bci in bookCategoriesInput)
+            {
+                var books = context
+                    .Books
+                    .Where(b => b.BookCategories.
+                           Any(c => c.Category.Name.ToLower() == bci.ToLower()))
+                    .Select(b => b.Title)
+                    .ToList();
+
+                booksToAdd.AddRange(books);
+            }
+
+            var resultToPrint = booksToAdd
+                        .OrderBy(b => b);
+
+            return string.Join(Environment.NewLine, resultToPrint);
         }
     }
 }
