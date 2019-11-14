@@ -1,6 +1,7 @@
 ﻿namespace BookShop
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
 
@@ -15,9 +16,9 @@
             {
                 //DbInitializer.ResetDatabase(db);
 
-                //string input = Console.ReadLine();
+                int year = int.Parse(Console.ReadLine());
 
-                string result = GetBooksByPrice(db);
+                string result = GetBooksNotReleasedIn(db, year);
 
                 Console.WriteLine(result);
             }
@@ -75,7 +76,17 @@
             return result.ToString().TrimEnd();
         }
 
+        //p04 - Not Released In
+        public static string GetBooksNotReleasedIn(BookShopContext context, int year)
+        {
+            var notReleasedBooks = context
+                .Books
+                .OrderBy(b => b.BookId)
+                .Where(b => b.ReleaseDate.Value.Year != year)
+                .Select(b => b.Title)
+                .ToList();
 
-
+            return string.Join(Environment.NewLine, notReleasedBooks);
+        }
     }
 }
