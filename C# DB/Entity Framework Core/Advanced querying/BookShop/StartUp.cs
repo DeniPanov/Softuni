@@ -19,7 +19,7 @@
 
                 string input = Console.ReadLine();
 
-                string result = GetBooksByCategory(db, input);
+                string result = GetBooksReleasedBefore(db, input);
 
                 Console.WriteLine(result);
             }
@@ -115,6 +115,34 @@
                         .OrderBy(b => b);
 
             return string.Join(Environment.NewLine, resultToPrint);
+        }
+
+        //p06 - Released Before Date
+        public static string GetBooksReleasedBefore(BookShopContext context, string date)
+        {
+            DateTime currentDate = DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            var booksBeforeRelease = context
+                .Books
+                .Select(b => new
+                {
+                    b.Title,
+                    b.EditionType,
+                    b.Price,
+                    b.ReleaseDate
+                })
+                .Where(b => b.ReleaseDate < currentDate)
+                .OrderByDescending(b => b.ReleaseDate)
+                .ToList();
+
+            var result = new StringBuilder();
+
+            foreach (var book in booksBeforeRelease)
+            {
+                result.AppendLine($"{book.Title} - {book.EditionType} - ${book.Price:f2}");
+            }
+
+            return result.ToString().TrimEnd();
         }
     }
 }
