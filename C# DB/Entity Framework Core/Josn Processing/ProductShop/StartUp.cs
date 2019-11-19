@@ -15,9 +15,9 @@
         {
             using (var db = new ProductShopContext())
             {
-                string input = File.ReadAllText(@"./../../../Datasets/products.json");
+                string inputJson = File.ReadAllText(@"./../../../Datasets/categories.json");
 
-                string result = ImportProducts(db, input);
+                string result = ImportCategories(db, inputJson);
 
                 Console.WriteLine(result);
             }
@@ -44,6 +44,20 @@
             context.SaveChanges();
 
             return $"Successfully imported {products.Count}";
+        }
+
+        //p03 - Import Categories
+        public static string ImportCategories(ProductShopContext context, string inputJson)
+        {
+            var categories = JsonConvert.DeserializeObject<List<Category>>(inputJson)
+                .Where(c => string.IsNullOrWhiteSpace(c.Name) ==  false)
+                .ToList();
+
+            context.Categories.AddRange(categories);
+
+            context.SaveChanges();
+
+            return $"Successfully imported {categories.Count}";
         }
     }
 }
