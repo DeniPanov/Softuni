@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Text;
     using System.Linq;
     using System.Collections.Generic;
 
@@ -9,15 +10,18 @@
 
     using ProductShop.Data;
     using ProductShop.Models;
+
     public class StartUp
     {
         public static void Main()
         {
             using (var db = new ProductShopContext())
             {
-                string inputJson = File.ReadAllText(@"./../../../Datasets/categories-products.json");
+                string path = @"./../../../Datasets/products-in-range.json";
 
-                string result = ImportCategoryProducts(db, inputJson);
+                string result = GetProductsInRange(db);
+
+                File.WriteAllText(path, result);
 
                 Console.WriteLine(result);
             }
@@ -70,6 +74,27 @@
             context.SaveChanges();
 
             return $"Successfully imported {categoriesProducts.Count}";
+        }
+
+        //p05 - Export Products In Range
+        public static string GetProductsInRange(ProductShopContext context)
+        {
+            var productsInRange = context
+                .Products
+                .Where(p => p.Price >= 500
+                    && p.Price <= 1000)
+                .Select(p => new 
+                {
+                    name = p.Name,
+                    price = p.Price,
+                    seller = $"{p.Seller.FirstName} {p.Seller.LastName}"
+                })
+                .OrderBy(p => p.price)
+                .ToList();
+
+            string result = JsonConvert.SerializeObject(productsInRange, Formatting.Indented);
+
+            return result;
         }
     }
 }
