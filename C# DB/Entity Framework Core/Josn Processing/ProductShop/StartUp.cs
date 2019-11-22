@@ -17,9 +17,9 @@
         {
             using (var db = new ProductShopContext())
             {
-                string path = @"./../../../Datasets/categories-by-products.json";
+                string path = @"./../../../Datasets/users-and-products.json";
 
-                string result = GetCategoriesByProductsCount(db);
+                string result = GetUsersWithProducts(db);
 
                 File.WriteAllText(path, result);
 
@@ -143,5 +143,53 @@
 
             return result;
         }
+
+        //p08 - Export Users and Products
+        public static string GetUsersWithProducts(ProductShopContext context)
+        {
+            var users = context
+                .Users
+                .Where(u => u.ProductsSold.Any(p => p.BuyerId != null))
+                .Select(u => new
+                {
+                    firstName = u.FirstName,
+                    lastName = u.LastName,
+                    age = u.Age,
+                    soldProducts = new
+                    {
+                        count = u.ProductsSold
+                            .Where(ps => ps.BuyerId != null)
+                            .Count(),
+                        products = u.ProductsSold
+                            .Where(ps => ps.BuyerId != null)
+                            .Select(ps => new
+                            {
+                                name = ps.Name,
+                                price = ps.Price
+                            })
+                        .ToList()
+                    }
+                })
+                .OrderByDescending(u => u.soldProducts.count)
+                .ToList();
+
+            var output = new
+            {
+                usersCount = users.Count,
+                users
+            };
+
+
+            string result = JsonConvert.SerializeObject(output, new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
+            return result;
+        }
+
+        //p09 - Import Suppliers 
+
     }
 }
