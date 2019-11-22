@@ -17,9 +17,9 @@
         {
             using (var db = new ProductShopContext())
             {
-                string path = @"./../../../Datasets/users-sold-products.json";
+                string path = @"./../../../Datasets/categories-by-products.json";
 
-                string result = GetSoldProducts(db);
+                string result = GetCategoriesByProductsCount(db);
 
                 File.WriteAllText(path, result);
 
@@ -120,6 +120,26 @@
                 .ToList();
 
             var result = JsonConvert.SerializeObject(usersWitAtleast1Buyer, Formatting.Indented);
+
+            return result;
+        }
+
+        //p07 - Export Categories By Products Count
+        public static string GetCategoriesByProductsCount(ProductShopContext context)
+        {
+            var categories = context
+                .Categories
+                .OrderByDescending(c => c.CategoryProducts.Count)
+                .Select(c => new
+                {
+                    category = c.Name,
+                    productsCount = c.CategoryProducts.Count,
+                    averagePrice = $"{c.CategoryProducts.Average(p => p.Product.Price):f2}",
+                    totalRevenue = $"{c.CategoryProducts.Sum(p => p.Product.Price):f2}"
+                })
+                .ToList();
+
+            string result = JsonConvert.SerializeObject(categories, Formatting.Indented);
 
             return result;
         }
