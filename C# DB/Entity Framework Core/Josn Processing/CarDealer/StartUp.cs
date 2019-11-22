@@ -15,10 +15,10 @@
         {
             using (var db = new CarDealerContext())
             {
-                string path = @"./../../../Datasets/suppliers.json";
+                string path = @"./../../../Datasets/customers.json";
                 string inputJson = File.ReadAllText(path);
 
-                string result = ImportSuppliers(db, inputJson);
+                string result = ImportCustomers(db, inputJson);
 
                 Console.WriteLine(result);
             }
@@ -33,6 +33,54 @@
             context.SaveChanges();
 
             return $"Successfully imported {suppliers.Count()}.";//String.Format(outputMessage,suppliers.Count());
+        }
+
+        //p10 - Import Parts 
+        public static string ImportParts(CarDealerContext context, string inputJson)
+        {
+            var parts = JsonConvert.DeserializeObject<List<Part>>(inputJson);
+
+            var validParts = new List<Part>();
+            var suppliersIds = context
+                .Suppliers
+                .Select(s => s.Id)
+                .ToList();
+
+            foreach (var part in parts)
+            {
+                if (suppliersIds.Contains(part.SupplierId))
+                {
+                    validParts.Add(part);
+                }
+            }
+
+            context.Parts.AddRange(validParts);
+            context.SaveChanges();
+
+            return $"Successfully imported {validParts.Count()}.";
+        }
+
+        //p11 - Import Cars 
+        public static string ImportCars(CarDealerContext context, string inputJson)
+        {
+            var cars = JsonConvert.DeserializeObject<List<Car>>(inputJson);
+
+            Console.WriteLine(cars);
+            //context.Cars.AddRange(cars);
+            //context.SaveChanges();
+
+            return $"Successfully imported {cars.Count}.";
+        }
+
+        //p12 - Import Customers
+        public static string ImportCustomers(CarDealerContext context, string inputJson)
+        {
+            var customers = JsonConvert.DeserializeObject<List<Customer>>(inputJson);
+
+            context.Customers.AddRange(customers);
+            context.SaveChanges();
+
+            return $"Successfully imported {customers.Count}.";
         }
     }
 
