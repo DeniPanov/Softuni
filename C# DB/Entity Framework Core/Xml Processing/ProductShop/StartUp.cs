@@ -17,10 +17,10 @@
         {
             using (var db = new ProductShopContext())
             {
-                string path = @"./../../../Datasets/products.xml";
+                string path = @"./../../../Datasets/categories-products.xml";
                 string inputXml = File.ReadAllText(path);
 
-                string result = ImportProducts(db, inputXml);
+                string result = ImportCategoryProducts(db, inputXml);
 
                 Console.WriteLine(result);
             }
@@ -29,8 +29,8 @@
         //p01 - Import Users
         public static string ImportUsers(ProductShopContext context, string inputXml)
         {
-            var serializer = new XmlSerializer(typeof(ImportUserDto[])
-                , new XmlRootAttribute("Users"));
+            var serializer = new XmlSerializer(typeof(ImportUserDto[]),
+                new XmlRootAttribute("Users"));
 
             ImportUserDto[] userDtos;
 
@@ -63,8 +63,8 @@
         //p02 - Import Products
         public static string ImportProducts(ProductShopContext context, string inputXml)
         {
-            var serializer = new XmlSerializer(typeof(ImportProductDto[])
-                , new XmlRootAttribute("Products"));
+            var serializer = new XmlSerializer(typeof(ImportProductDto[]),
+                new XmlRootAttribute("Products"));
 
             ImportProductDto[] productDtos;
 
@@ -127,6 +127,42 @@
             context.SaveChanges();
 
             return $"Successfully imported {categoriesToImport.Count}";
+        }
+
+        //p04 - Import Categories and Products 
+        public static string ImportCategoryProducts(ProductShopContext context, string inputXml)
+        {
+            var serializer = new XmlSerializer(typeof(ImportCategoryProductDto[]),
+                new XmlRootAttribute("CategoryProducts"));
+
+            ImportCategoryProductDto[] importCategoryDtos;
+
+            using (var reader = new StringReader(inputXml))
+            {
+                importCategoryDtos = ((ImportCategoryProductDto[])
+                    serializer.Deserialize(reader))
+                    .Where(cp => context.Categories.Any(c => c.Id == cp.CategoryId) &&
+                                 context.Products.Any(p => p.Id == cp.ProductId))
+                    .ToArray();
+            }
+
+            var categoryProdoctsToImport = new List<CategoryProduct>();
+
+            foreach (var dto in importCategoryDtos)
+            {
+                CategoryProduct categoryProduct = new CategoryProduct()
+                {
+                    CategoryId = dto.CategoryId,
+                    ProductId = dto.ProductId
+                };
+
+                categoryProdoctsToImport.Add(categoryProduct);
+            }
+
+            context.CategoryProducts.AddRange(categoryProdoctsToImport);
+            context.SaveChanges();
+
+            return $"Successfully imported {categoryProdoctsToImport.Count}";
         }
 
     }
