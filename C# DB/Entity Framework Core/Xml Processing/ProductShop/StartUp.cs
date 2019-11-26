@@ -2,12 +2,14 @@
 {
     using System;
     using System.IO;
+    using System.Text;
     using System.Linq;
     using System.Collections.Generic;
 
     using ProductShop.Data;
     using ProductShop.Models;
     using ProductShop.Dtos.Import;
+    using ProductShop.Dtos.Export;
 
     using System.Xml.Serialization;
 
@@ -17,10 +19,10 @@
         {
             using (var db = new ProductShopContext())
             {
-                string path = @"./../../../Datasets/categories-products.xml";
-                string inputXml = File.ReadAllText(path);
+                //string path = @"./../../../Datasets/categories-products.xml";
+                //string inputXml = File.ReadAllText(path);
 
-                string result = ImportCategoryProducts(db, inputXml);
+                string result = GetProductsInRange(db);
 
                 Console.WriteLine(result);
             }
@@ -165,5 +167,36 @@
             return $"Successfully imported {categoryProdoctsToImport.Count}";
         }
 
+        //p05 - Products In Range
+        public static string GetProductsInRange(ProductShopContext context)
+        {
+            var productBetween500And1000 = context
+                .Products
+                .Where(p => p.Price >= 500 && p.Price <= 1000)
+                .Select(p => new ExportProductDto
+                {
+                    Name = p.Name,
+                    Price = p.Price,
+                    BuyerFullName = $"{p.Buyer.FirstName} {p.Buyer.LastName}"
+                })
+                .OrderBy(p => p.Price)
+                .Take(10)
+                .ToArray();
+
+            var serializer = new XmlSerializer(typeof(ExportProductDto[]),
+                new XmlRootAttribute("Products"));
+
+            var result = new StringBuilder();
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(result))
+            {
+                serializer.Serialize(writer, productBetween500And1000, namespaces);
+            }
+
+            return result.ToString().TrimEnd();
+        }
     }
 }
