@@ -22,7 +22,7 @@
                 //string path = @"./../../../Datasets/categories-products.xml";
                 //string inputXml = File.ReadAllText(path);
 
-                string result = GetCategoriesByProductsCount(db);
+                string result = GetUsersWithProducts(db);
 
                 Console.WriteLine(result);
             }
@@ -205,18 +205,18 @@
             var soldProducts = context
                 .Users
                 .Where(u => u.ProductsSold.Any())
-                .Select(u => new ExportUserSoldProductsDto
-                {
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    ExportSoldProducts = u.ProductsSold
-                    .Select(p => new ExportSoldProductsDto
-                    {
-                        Name = p.Name,
-                        Price = p.Price
-                    })
-                    .ToArray()
-                })
+                //.Select(u => new ExportUserSoldProductsDto
+                //{
+                //    FirstName = u.FirstName,
+                //    LastName = u.LastName,
+                //    SoldProducts = u.ProductsSold
+                //    .Select(p => new ExportSoldProductsDto
+                //    {
+                //        Name = p.Name,
+                //        Price = p.Price
+                //    })
+                //    .ToArray()
+                //})
                 .OrderBy(u => u.LastName)
                 .ThenBy(u => u.FirstName)
                 .Take(5)
@@ -269,5 +269,53 @@
             return result.ToString().TrimEnd();
         }
 
+        //p08 - Users And Products
+        public static string GetUsersWithProducts(ProductShopContext context)
+        {
+            var usersAndProducts = context
+                .Users
+                .Where(u => u.ProductsSold.Any())
+                .Select(u => new ExportUserSoldProductsDto
+                {
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Age = u.Age,
+                    SoldProducts = new ExportSoldProductsDto
+                    {
+                        Count = u.ProductsSold.Count(),
+                        Products = u.ProductsSold
+                        .Select(ps => new ProductDto
+                        {
+                            Name = ps.Name,
+                            Price = ps.Price
+                        })
+                        .OrderBy(ps => ps.Price)
+                        .ToArray()
+                    }
+                })
+                .OrderByDescending(u => u.SoldProducts.Count)
+                .Take(10)
+                .ToArray();
+
+            var usersToExport = new ExportUsersDto
+            {
+                Count = usersAndProducts.Count(),
+                UserSolds = usersAndProducts
+            };
+
+            XmlSerializer serializer = new XmlSerializer(typeof(ExportUsersDto),
+                new XmlRootAttribute("Users"));
+
+            var result = new StringBuilder();
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(result))
+            {
+                serializer.Serialize(writer, usersToExport, namespaces);
+            }
+
+            return result.ToString().TrimEnd();
+        }
     }
 }

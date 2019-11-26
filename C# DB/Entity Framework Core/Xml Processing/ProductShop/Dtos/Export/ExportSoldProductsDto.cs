@@ -2,13 +2,13 @@
 {
     using System.Xml.Serialization;
 
-    [XmlType("Product")]
+    [XmlType("SoldProducts")]
     public class ExportSoldProductsDto
     {
-        [XmlElement("name")]
-        public string Name { get; set; }
+        [XmlElement("count")]
+        public int Count { get; set; }
 
-        [XmlElement("price")]
-        public decimal Price { get; set; }
+        [XmlArray("products")]
+        public ProductDto[] Products { get; set; }
     }
 }

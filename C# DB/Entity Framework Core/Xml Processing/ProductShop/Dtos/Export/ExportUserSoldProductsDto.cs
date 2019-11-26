@@ -11,7 +11,10 @@
         [XmlElement("lastName")]
         public string LastName { get; set; }
 
-        [XmlArray("soldProducts")]
-        public ExportSoldProductsDto[] ExportSoldProducts { get; set; }
+        [XmlElement("age")]
+        public int? Age { get; set; }
+
+        [XmlElement("SoldProducts")]
+        public ExportSoldProductsDto SoldProducts { get; set; }
     }
 }
