@@ -22,7 +22,7 @@
                 //string path = @"./../../../Datasets/categories-products.xml";
                 //string inputXml = File.ReadAllText(path);
 
-                string result = GetSoldProducts(db);
+                string result = GetCategoriesByProductsCount(db);
 
                 Console.WriteLine(result);
             }
@@ -240,7 +240,33 @@
         //p07 - Categories By Products Count
         public static string GetCategoriesByProductsCount(ProductShopContext context)
         {
+            var categoriesByProducts = context
+                .Categories
+                .Select(c => new ExportCategoryByProductDto
+                {
+                    Name = c.Name,
+                    Count = c.CategoryProducts.Count,
+                    AveragePrice = c.CategoryProducts.Average(p => p.Product.Price),
+                    TotalRevenue = c.CategoryProducts.Sum(p => p.Product.Price)
+                })
+                .OrderByDescending(c => c.Count)
+                .ThenBy(c => c.TotalRevenue)
+                .ToArray();
 
+            var serializer = new XmlSerializer(typeof(ExportCategoryByProductDto[]),
+                new XmlRootAttribute("Categories"));
+
+            var result = new StringBuilder();
+
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(result))
+            {
+                serializer.Serialize(writer, categoriesByProducts, namespaces);
+            }
+
+            return result.ToString().TrimEnd();
         }
 
     }
