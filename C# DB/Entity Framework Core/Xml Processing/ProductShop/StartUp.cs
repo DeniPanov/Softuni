@@ -22,7 +22,7 @@
                 //string path = @"./../../../Datasets/categories-products.xml";
                 //string inputXml = File.ReadAllText(path);
 
-                string result = GetProductsInRange(db);
+                string result = GetSoldProducts(db);
 
                 Console.WriteLine(result);
             }
@@ -198,5 +198,50 @@
 
             return result.ToString().TrimEnd();
         }
+
+        //p06 - Sold Products
+        public static string GetSoldProducts(ProductShopContext context)
+        {
+            var soldProducts = context
+                .Users
+                .Where(u => u.ProductsSold.Any())
+                .Select(u => new ExportUserSoldProductsDto
+                {
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    ExportSoldProducts = u.ProductsSold
+                    .Select(p => new ExportSoldProductsDto
+                    {
+                        Name = p.Name,
+                        Price = p.Price
+                    })
+                    .ToArray()
+                })
+                .OrderBy(u => u.LastName)
+                .ThenBy(u => u.FirstName)
+                .Take(5)
+                .ToArray();
+
+            var serializer = new XmlSerializer(typeof(ExportUserSoldProductsDto[]),
+                new XmlRootAttribute("Users"));
+
+            var result = new StringBuilder();
+            var namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("", "");
+
+            using (var writer = new StringWriter(result))
+            {
+                serializer.Serialize(writer, soldProducts, namespaces);
+            }
+
+            return result.ToString().TrimEnd();
+        }
+
+        //p07 - Categories By Products Count
+        public static string GetCategoriesByProductsCount(ProductShopContext context)
+        {
+
+        }
+
     }
 }
