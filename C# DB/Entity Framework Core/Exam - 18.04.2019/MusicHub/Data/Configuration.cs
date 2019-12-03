@@ -2,7 +2,7 @@
 {
    public static class Configuration
     {
-        public static string ConnectionString = 
-            @"Server=.;Database=MusicHub;Trusted_Connection=True";
+        public static string ConnectionString =
+            @"Server=DESKTOP-2A8QSKB\SQLEXPRESS;Database=MusicHub;Trusted_Connection=True";
     }
 }
