@@ -124,12 +124,12 @@
             var serializer = new XmlSerializer(typeof(ImportSongDto[]),
                 new XmlRootAttribute("Songs"));
 
-            var songDto = (ImportSongDto[])serializer.Deserialize(new StringReader(xmlString));
+            var songDtos = (ImportSongDto[])serializer.Deserialize(new StringReader(xmlString));
 
             var validSongs = new List<Song>();
             var result = new StringBuilder();
 
-            foreach (var dto in songDto)
+            foreach (var dto in songDtos)
             {
                 if (IsValid(dto) == false)
                 {
@@ -137,14 +137,24 @@
                     continue;
                 }
 
-                //validate Genre, Duration and CreateOn
+                var isValidEnum = Enum.TryParse<Genre>(dto.Genre, out Genre genre);
+                var duration = TimeSpan.ParseExact(dto.Duration, "c", CultureInfo.InvariantCulture);
+                var albumId = context.Albums.FirstOrDefault(a => a.Id == dto.AlbumId);
+                var writerId = context.Writers.FirstOrDefault(w => w.Id == dto.WriterId);
+
+                if (isValidEnum == false || duration == null 
+                    ||albumId == null || writerId == null)
+                {
+                    result.AppendLine(ErrorMessage);
+                    continue;
+                }
 
                 Song song = new Song
                 {
                     Name = dto.Name,
-                    Duration = TimeSpan.ParseExact(dto.Duration, "c", CultureInfo.InvariantCulture), //Validate with TryParse
+                    Duration = duration, 
                     CreatedOn = DateTime.ParseExact(dto.CreatedOn, "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                    Genre = Enum.Parse<Genre>(dto.Genre.ToString()), //TryParse?
+                    Genre = genre,
                     AlbumId = dto.AlbumId,
                     WriterId = dto.WriterId,
                     Price = dto.Price
