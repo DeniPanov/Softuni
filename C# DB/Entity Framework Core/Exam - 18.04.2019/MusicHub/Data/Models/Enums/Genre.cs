@@ -6,6 +6,6 @@
         Rap,
         PopMusic,
         Rock,
-        Jazz
+        Jazz,
     }
 }

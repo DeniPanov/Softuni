@@ -1,14 +1,17 @@
 ﻿namespace MusicHub.DataProcessor
 {
     using System;
+    using System.IO;
     using System.Text;
     using System.Linq;
     using System.Globalization;
+    using System.Xml.Serialization;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using Data;
     using MusicHub.Data.Models;
+    using MusicHub.Data.Models.Enums;
     using MusicHub.DataProcessor.ImportDtos;
 
     using Newtonsoft.Json;
@@ -17,13 +20,13 @@
     {
         private const string ErrorMessage = "Invalid data";
 
-        private const string SuccessfullyImportedWriter 
+        private const string SuccessfullyImportedWriter
             = "Imported {0}";
-        private const string SuccessfullyImportedProducerWithPhone 
+        private const string SuccessfullyImportedProducerWithPhone
             = "Imported {0} with phone: {1} produces {2} albums";
         private const string SuccessfullyImportedProducerWithNoPhone
             = "Imported {0} with no phone number produces {1} albums";
-        private const string SuccessfullyImportedSong 
+        private const string SuccessfullyImportedSong
             = "Imported {0} ({1} genre) with duration {2}";
         private const string SuccessfullyImportedPerformer
             = "Imported {0} ({1} songs)";
@@ -118,7 +121,47 @@
 
         public static string ImportSongs(MusicHubDbContext context, string xmlString)
         {
-            throw new NotImplementedException();
+            var serializer = new XmlSerializer(typeof(ImportSongDto[]),
+                new XmlRootAttribute("Songs"));
+
+            var songDto = (ImportSongDto[])serializer.Deserialize(new StringReader(xmlString));
+
+            var validSongs = new List<Song>();
+            var result = new StringBuilder();
+
+            foreach (var dto in songDto)
+            {
+                if (IsValid(dto) == false)
+                {
+                    result.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                //validate Genre, Duration and CreateOn
+
+                Song song = new Song
+                {
+                    Name = dto.Name,
+                    Duration = TimeSpan.ParseExact(dto.Duration, "c", CultureInfo.InvariantCulture), //Validate with TryParse
+                    CreatedOn = DateTime.ParseExact(dto.CreatedOn, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    Genre = Enum.Parse<Genre>(dto.Genre.ToString()), //TryParse?
+                    AlbumId = dto.AlbumId,
+                    WriterId = dto.WriterId,
+                    Price = dto.Price
+                };
+
+                validSongs.Add(song);
+                result.AppendLine(string.Format(
+                    SuccessfullyImportedSong,
+                    song.Name,
+                    song.Genre,
+                    song.Duration));
+            }
+
+            context.Songs.AddRange(validSongs);
+            context.SaveChanges();
+
+            return result.ToString().TrimEnd();
         }
 
         public static string ImportSongPerformers(MusicHubDbContext context, string xmlString)

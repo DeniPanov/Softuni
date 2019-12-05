@@ -19,7 +19,7 @@
         public string Name { get; set; }
 
         [Required]
-        public TimeSpan Durtation { get; set; }
+        public TimeSpan Duration { get; set; }
 
         [Required]
         public DateTime CreatedOn { get; set; }
@@ -27,7 +27,6 @@
         [Required]
         public Genre Genre { get; set; }
 
-        //Shoud this be nullable?
         public int? AlbumId { get; set; }
 
         public Album Album { get; set; }
