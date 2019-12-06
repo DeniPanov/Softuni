@@ -1,5 +1,6 @@
 ﻿namespace MusicHub.DataProcessor
 {
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Globalization;
@@ -9,7 +10,6 @@
     using MusicHub.DataProcessor.ExportDtos;
 
     using Newtonsoft.Json;
-    using System.IO;
 
     public class Serializer
     {
