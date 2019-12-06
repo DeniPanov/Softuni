@@ -142,8 +142,8 @@
                 var albumId = context.Albums.FirstOrDefault(a => a.Id == dto.AlbumId);
                 var writerId = context.Writers.FirstOrDefault(w => w.Id == dto.WriterId);
 
-                if (isValidEnum == false || duration == null 
-                    ||albumId == null || writerId == null)
+                if (isValidEnum == false || duration == null
+                    || albumId == null || writerId == null)
                 {
                     result.AppendLine(ErrorMessage);
                     continue;
@@ -152,7 +152,7 @@
                 Song song = new Song
                 {
                     Name = dto.Name,
-                    Duration = duration, 
+                    Duration = duration,
                     CreatedOn = DateTime.ParseExact(dto.CreatedOn, "dd/MM/yyyy", CultureInfo.InvariantCulture),
                     Genre = genre,
                     AlbumId = dto.AlbumId,
@@ -176,7 +176,67 @@
 
         public static string ImportSongPerformers(MusicHubDbContext context, string xmlString)
         {
-            throw new NotImplementedException();
+            var serializer = new XmlSerializer(typeof(ImportPerformersDto[]),
+                new XmlRootAttribute("Performers"));
+
+            var performersDto = (ImportPerformersDto[])
+                serializer.Deserialize(new StringReader(xmlString));
+
+            var validPerformers = new List<Performer>();
+
+            var result = new StringBuilder();
+
+            foreach (var dto in performersDto)
+            {
+                if (IsValid(dto) == false)
+                {
+                    result.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                Performer performer = new Performer
+                {
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                    Age = dto.Age,
+                    NetWorth = dto.NetWorth,
+                };
+
+                int validSongIdsCount = context.Songs.Count(x => dto.PerformersSongs.Any(s => s.SongId == x.Id));
+                bool isValidSongId = true;
+
+                foreach (var importPerformersSongsDto in dto.PerformersSongs)
+                {
+                    if (validSongIdsCount != dto.PerformersSongs.Length)
+                    {
+                        result.AppendLine(ErrorMessage);
+                        isValidSongId = false;
+                        break;
+                    }
+
+                    performer.PerformerSongs.Add(new SongPerformer
+                    {
+                        SongId = importPerformersSongsDto.SongId
+                        //performerId?
+                    });
+                }
+
+                if (isValidSongId == false)
+                {
+                    continue;
+                }
+
+                validPerformers.Add(performer);
+                result.AppendLine(string.Format(
+                    SuccessfullyImportedPerformer,
+                    performer.FirstName,
+                    performer.PerformerSongs.Count));
+            }
+
+            context.Performers.AddRange(validPerformers);
+            context.SaveChanges();
+
+            return result.ToString().TrimEnd();
         }
 
         private static bool IsValid(object obj)
