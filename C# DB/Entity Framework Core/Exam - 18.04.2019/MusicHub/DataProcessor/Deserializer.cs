@@ -217,7 +217,6 @@
                     performer.PerformerSongs.Add(new SongPerformer
                     {
                         SongId = importPerformersSongsDto.SongId
-                        //performerId?
                     });
                 }
 
