@@ -8,7 +8,6 @@
     using System.Xml.Serialization;
 
     using Data;
-    using TeisterMask.Data.Models.Enums;
     using TeisterMask.DataProcessor.ExportDto;
 
     using Newtonsoft.Json;
@@ -18,6 +17,28 @@
     {
         public static string ExportProjectWithTheirTasks(TeisterMaskContext context)
         {
+            var projects = context
+                .Projects
+                .Where(p => p.Tasks.Any())
+                .Select(p => new ProjectDto
+                {
+                    TasksCount = p.Tasks.Count,
+                    ProjectName = p.Name,
+                    HasEndDate = p.DueDate != null
+                                    ? "Yes"
+                                    : "No",
+                    Tasks = p.Tasks.Select(t => new ExportTaskDto
+                    {
+                        Name = t.Name,
+                        LabelType = t.LabelType.ToString()
+                    })
+                    .OrderBy(t => t.Name)
+                    .ToArray()
+                })
+                .OrderByDescending(p => p.TasksCount)
+                .ThenBy(p => p.ProjectName)
+                .ToArray();
+
             var serializer = new XmlSerializer(typeof(ProjectDto[]),
                 new XmlRootAttribute("Projects"));
 
@@ -25,7 +46,7 @@
             var namespaces = new XmlSerializerNamespaces();
             namespaces.Add("", "");
 
-            //serializer.Deserialize(new StringWriter(result));
+            serializer.Serialize(new StringWriter(result), projects, namespaces);
 
             return result.ToString().TrimEnd();
         }
