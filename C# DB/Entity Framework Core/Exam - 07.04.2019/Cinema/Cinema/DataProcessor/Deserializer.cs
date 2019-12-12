@@ -157,7 +157,55 @@
 
         public static string ImportCustomerTickets(CinemaContext context, string xmlString)
         {
-            throw new NotImplementedException();
+            var serializer = new XmlSerializer(typeof(ImportCustomerDto[]),
+                new XmlRootAttribute("Customers"));
+
+            var customersDto = (ImportCustomerDto[])
+                serializer.Deserialize(new StringReader(xmlString));
+
+            var result = new StringBuilder();
+
+            foreach (var dto in customersDto)
+            {
+                if (IsValid(dto) == false || dto.Tickets.All(IsValid) == false)
+                {
+                    result.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                Customer customer = new Customer
+                {
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                    Age = dto.Age,
+                    Balance = dto.Balance
+                };
+
+                context.Customers.Add(customer);
+
+                customer.Tickets = new List<Ticket>();
+
+                foreach (var ticketDto in dto.Tickets)
+                {
+                    Ticket ticket = new Ticket
+                    {
+                        ProjectionId = ticketDto.ProjectionId,
+                        Price = ticketDto.Price
+                    };
+
+                    customer.Tickets.Add(ticket);
+                }
+
+                result.AppendLine(string.Format(
+                    SuccessfulImportCustomerTicket,
+                    customer.FirstName,
+                    customer.LastName,
+                    customer.Tickets.Count));
+            }
+
+            context.SaveChanges();
+
+            return result.ToString().TrimEnd();
         }
 
         private static bool IsValid(object obj)
