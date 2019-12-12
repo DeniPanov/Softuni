@@ -1,7 +1,7 @@
 ﻿namespace TeisterMask.DataProcessor.ImportDto
 {
-    using System.ComponentModel.DataAnnotations;
     using System.Xml.Serialization;
+    using System.ComponentModel.DataAnnotations;
 
     [XmlType("Task")]
     public class ImportTaskDto

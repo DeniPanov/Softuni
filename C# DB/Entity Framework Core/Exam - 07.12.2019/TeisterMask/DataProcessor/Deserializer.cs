@@ -52,7 +52,7 @@
                     OpenDate = DateTime.ParseExact(dto.OpenDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
                 };
 
-                if (string.IsNullOrEmpty(dto.DueDate))
+                if (string.IsNullOrEmpty(dto.DueDate)) //Refactor this later. Do you even need it?
                 {
                     project.DueDate = null;
                 }
@@ -107,7 +107,6 @@
         {
             var employeesDtos = JsonConvert.DeserializeObject<ImportEmployeeDto[]>(jsonString);
 
-            var validEmployees = new List<Employee>();
             var result = new StringBuilder();
 
             foreach (var dto in employeesDtos)
@@ -120,21 +119,56 @@
 
                 Employee employee = new Employee
                 {
-                    //Username = dto.Username,
-                    //Email = dto.Email,
-                    //Phone = dto.Phone,
-                    //EmployeesTasks = dto.EmployeesTasks
-
+                    Username = dto.Username,
+                    Email = dto.Email,
+                    Phone = dto.Phone,
                 };
 
-                validEmployees.Add(employee);
+                context.Employees.Add(employee);
 
+                employee.EmployeesTasks = new List<EmployeeTask>();
+
+                foreach (var taskDto in dto.Tasks.Distinct())
+                {
+                    bool taskExistInTheDb = CheckIfTaskExistInTheDb(context, taskDto);
+
+                    if (IsValid(taskDto) == false || taskExistInTheDb == false)
+                    {
+                        result.AppendLine(ErrorMessage);
+                        continue;
+                    }
+
+                    EmployeeTask employeeTask = new EmployeeTask
+                    {
+                        TaskId = taskDto,
+                        Employee = employee
+                    };
+
+                    employee.EmployeesTasks.Add(employeeTask);
+                }
+
+                result.AppendLine(string.Format(
+                    SuccessfullyImportedEmployee,
+                    employee.Username,
+                    employee.EmployeesTasks.Count));
             }
 
-            context.Employees.AddRange(validEmployees);
             context.SaveChanges();
 
             return result.ToString().TrimEnd();
+        }
+
+        private static bool CheckIfTaskExistInTheDb(TeisterMaskContext context, int taskDto)
+        {
+            bool taskExistInTheDb = true;
+            var currentTask = context.Tasks.FirstOrDefault(t => taskDto == t.Id);
+
+            if (currentTask == null)
+            {
+                taskExistInTheDb = false;
+            }
+
+            return taskExistInTheDb;
         }
 
         private static bool IsValid(object dto)
