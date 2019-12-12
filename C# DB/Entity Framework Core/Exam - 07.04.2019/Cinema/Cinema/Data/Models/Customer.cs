@@ -21,7 +21,7 @@
         public string LastName { get; set; }
 
         [Required]
-        [Range(12,110)]
+        [Range(12, 110)]
         public int Age { get; set; }
 
         [Required]
