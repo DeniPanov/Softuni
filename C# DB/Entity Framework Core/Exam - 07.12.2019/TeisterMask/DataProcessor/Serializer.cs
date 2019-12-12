@@ -38,7 +38,11 @@
                 .Select(e => new
                 {
                     e.Username,
-                    Tasks = e.EmployeesTasks.Select(t => new
+                    Tasks = e.EmployeesTasks
+                    .Where(t => t.Task.OpenDate >= date)
+                    .OrderByDescending(t => t.Task.DueDate)
+                    .ThenBy(t => t.Task.Name)
+                    .Select(t => new
                     {
                         TaskName = t.Task.Name,
                         OpenDate = t.Task.OpenDate.ToString("d", CultureInfo.InvariantCulture),
@@ -46,10 +50,9 @@
                         LabelType = t.Task.LabelType.ToString(),
                         ExecutionType = t.Task.ExecutionType.ToString()
                     })
-                    .OrderByDescending(t => t.DueDate)
-                    .ThenBy(t => t.TaskName)
                     .ToList()
                 })
+                .ToList()
                 .OrderByDescending(e => e.Tasks.Count())
                 .ThenBy(e => e.Username)
                 .Take(10)
