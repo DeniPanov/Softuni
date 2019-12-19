@@ -1,0 +1,20 @@
+section{
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 22px;
+    padding-top: 40px;
+}
+
+section article header{
+    text-align: justify;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 300;
+}
+
+
+section article {
+    text-align: justify;
+    margin-top: 10px;
+    padding-left: 300;
+}
