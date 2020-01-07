@@ -7,5 +7,7 @@
         public const string HostHeaderKey = "Host";
 
         public const string HttpNewLine = "\r\n";
+
+        public const string UnsopportedHttpMethodExceptionMessage = "The HTTP Method {0} is not supproted.";
     }
 }
