@@ -39,10 +39,10 @@
         private void ParseRequest(string requestString)
         {
             string[] splitRequestContent = requestString
-                .Split(GlobalConstants.HttpNewLine, System.StringSplitOptions.None);
+                .Split(GlobalConstants.HttpNewLine, StringSplitOptions.None);
 
             string[] requestLine = splitRequestContent[0].Trim()
-                .Split(' ', System.StringSplitOptions.RemoveEmptyEntries); //new[] { ' ' }?
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries); //new[] { ' ' }?
 
             if (this.IsValidRequestLine(requestLine) == false)
             {
@@ -53,21 +53,31 @@
             this.ParseRequestUrl(requestLine);
             this.ParseRequestPath();
 
-            this.ParseHeaders(splitRequestContent.Skip(1).ToArray());
+            this.ParseRequestHeaders(this.ParsePlainRequestHeaders(splitRequestContent).ToArray());
             //this.ParseCookies();
 
             this.ParseRequestParameters(splitRequestContent[^1]);
             this.ParseQueryParameters();
-        }        
+        }
 
-        private void ParseHeaders(string[] v)
+        private void ParseRequestHeaders(string[] headersToSplit)
         {
-            throw new NotImplementedException();
+            headersToSplit
+                .Select(hts => hts
+                .Split(": ", StringSplitOptions.RemoveEmptyEntries))
+                .ToList();
+
+            foreach (var kvp in headersToSplit)
+            {
+                HttpHeader header = new HttpHeader(kvp[0].ToString(), kvp[1].ToString());
+                Headers.AddHeader(header);
+            }
+
         }
 
         private void ParseRequestPath()
         {
-            throw new NotImplementedException();
+            this.Path = Url.Split('?')[0];
         }
 
         private void ParseRequestUrl(string[] requestLine)
@@ -78,7 +88,7 @@
         private void ParseRequestMethod(string[] requestLine)
         {
             HttpRequestMethod outParam;
-            bool parseResult = Enum.TryParse(requestLine[0], out outParam);
+            bool parseResult = Enum.TryParse(requestLine[0], true, out outParam);
 
             if (parseResult == false)
             {
@@ -102,18 +112,47 @@
 
         private void ParseQueryParameters()
         {
-            throw new NotImplementedException();
+            var queryParams = this.Url.Split('?', '#')[1]
+                 .Split('&')
+                 .Select(queryParam => queryParam.Split('='))
+                 .ToList();
+
+            foreach (var param in queryParams)
+            {
+                this.QueryData.Add(param[0], param[1]);
+            }
         }
 
-        private void ParseRequestParameters(string v)
+        private void ParseRequestParameters(string requestBody)
         {
             ParseQueryParameters();
-            ParseFormDataParameters();
+            ParseFormDataParameters(requestBody);
         }
 
-        private void ParseFormDataParameters()
+        private void ParseFormDataParameters(string requestBody)
         {
+            //TODO:Parse multiple parameters by name
+            var formDataParams = requestBody
+                //.Split('?')[1]
+                    .Split('&')
+                    .Select(dataParam => dataParam.Split('='))
+                    .ToList();
 
+            foreach (var param in formDataParams)
+            {
+                this.QueryData.Add(param[0], param[1]);
+            }
+        }
+
+        private IEnumerable<string> ParsePlainRequestHeaders(string[] requestLines)
+        {
+            for (int i = 1; i < requestLines.Length; i++)
+            {
+                if (string.IsNullOrEmpty(requestLines[i]) == false)
+                {
+                    yield return requestLines[i];
+                }
+            }
         }
     }
 }
