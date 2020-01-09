@@ -48,7 +48,7 @@
 
             for (int i = 0; i < httpResponseWithBody.Length - httpResponseWithoutBody.Length; i++)
             {
-                httpResponseWithBody[i + httpResponseWithoutBody.Length - 1] = Content[i];
+                httpResponseWithBody[i + httpResponseWithoutBody.Length] = Content[i];
             }
 
             return httpResponseWithBody;
