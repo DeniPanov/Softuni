@@ -110,6 +110,8 @@
 
         private void ParseQueryParameters()
         {
+
+
             var queryParams = this.Url.Split('?', '#')[1]
                  .Split('&')
                  .Select(queryParam => queryParam.Split('='))
@@ -150,6 +152,13 @@
                     yield return requestLines[i];
                 }
             }
+        }
+
+        private bool IsValidRequestQueryString(string queryString, string[] queryParams)
+        {
+            CoreValidator.ThrowIfNullOrEmpty(queryString, nameof(queryString));
+
+            return true; //TODÖ: Regex query string
         }
     }
 }
