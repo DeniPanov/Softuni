@@ -110,17 +110,25 @@
 
         private void ParseQueryParameters()
         {
-
-
-            var queryParams = this.Url.Split('?', '#')[1]
+            if (this.HasQueryString())
+            {
+                var queryParams = this.Url.Split('?', '#')[1]
                  .Split('&')
                  .Select(queryParam => queryParam.Split('='))
                  .ToList();
 
-            foreach (var param in queryParams)
-            {
-                this.QueryData.Add(param[0], param[1]);
+                foreach (var param in queryParams)
+                {
+                    this.QueryData.Add(param[0], param[1]);
+                }
             }
+
+
+        }
+
+        private bool HasQueryString()
+        {
+            return this.Url.Split('?').Length > 1;
         }
 
         private void ParseRequestParameters(string requestBody)
@@ -132,15 +140,19 @@
         private void ParseFormDataParameters(string requestBody)
         {
             //TODO:Parse multiple parameters by name
-            var formDataParams = requestBody
-                    .Split('&')
-                    .Select(dataParam => dataParam.Split('='))
-                    .ToList();
-
-            foreach (var param in formDataParams)
+            if (string.IsNullOrEmpty(requestBody) == false)
             {
-                this.FormData.Add(param[0], param[1]);
+                var formDataParams = requestBody
+                        .Split('&')
+                        .Select(dataParam => dataParam.Split('='))
+                        .ToList();
+
+                foreach (var param in formDataParams)
+                {
+                    this.FormData.Add(param[0], param[1]);
+                }
             }
+
         }
 
         private IEnumerable<string> ParsePlainRequestHeaders(string[] requestLines)
