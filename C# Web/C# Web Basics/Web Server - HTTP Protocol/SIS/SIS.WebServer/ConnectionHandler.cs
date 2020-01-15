@@ -3,6 +3,7 @@
     using System;
     using System.Text;
     using System.Net.Sockets;
+    using System.Threading.Tasks;
 
     using SIS.HTTP.Enums;
     using SIS.HTTP.Common;
@@ -28,11 +29,11 @@
             this.serverRoutingTable = serverRoutingTable;
         }
 
-        public void ProcessRequest()
+        public async Task ProcessRequestAsync()
         {
             try
             {
-                var httpRequest = this.ReadRequest();
+                var httpRequest = await this.ReadRequestAsync();
 
                 if (httpRequest != null)
                 {
@@ -58,14 +59,14 @@
             this.client.Shutdown(SocketShutdown.Both);
         }
 
-        private IHttpRequest ReadRequest()
+        private async Task<IHttpRequest> ReadRequestAsync()
         {
             var result = new StringBuilder();
             var data = new ArraySegment<byte>(new byte[1024]);
 
             while (true)
             {
-                int redBytesCount = this.client.Receive(data.Array, SocketFlags.None);
+                int redBytesCount = await this.client.ReceiveAsync(data.Array, SocketFlags.None);
 
                 if (redBytesCount == 0)
                 {
