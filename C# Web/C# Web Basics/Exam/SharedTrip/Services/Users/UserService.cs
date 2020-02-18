@@ -1,31 +1,54 @@
 ﻿namespace SharedTrip.Services.Users
 {
+    using System.Linq;
     using System.Text;
     using System.Security.Cryptography;
     using SharedTrip.Models;
-    using SharedTrip.Services.Models;
 
     public class UserService : IUserService
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ApplicationDbContext db;
 
         public UserService(ApplicationDbContext db)
         {
-            this.dbContext = db;
+            this.db = db;
         }
 
-        public void Register(UserFormDataInputModel model)
+        public string GetUserId(string username, string password)
         {
+            var hashPassword = Hash(password);
+            var user = db.Users.FirstOrDefault(
+                u => u.Username == username && u.Password == hashPassword);
 
+            if (user == null)
+            {
+                return null;
+            }
+
+            return user.Id;
+        }
+
+        public void Register(string username, string email, string password)
+        {
             var user = new User
             {
-                Username = model.Username,
-                Email = model.Email,
-                Password = this.Hash(model.Password),
+                Username = username,
+                Email = email,
+                Password = this.Hash(password),
             };
 
-            this.dbContext.Users.Add(user);
-            this.dbContext.SaveChanges();
+            this.db.Users.Add(user);
+            this.db.SaveChanges();
+        }
+
+        public bool EmailExists(string email)
+        {
+            return this.db.Users.Any(x => x.Email == email);
+        }
+
+        public bool UsernameExists(string username)
+        {
+            return this.db.Users.Any(x => x.Username == username);
         }
 
         private string Hash(string input)

@@ -1,9 +1,13 @@
 ﻿namespace SharedTrip.Services.Users
 {
-    using SharedTrip.Services.Models;
-
     public interface IUserService
     {
-        void Register(UserFormDataInputModel model);
+        void Register(string username, string email, string password);
+
+        string GetUserId(string username, string password);
+
+        bool EmailExists(string email);
+
+        bool UsernameExists(string username);
     }
 }
