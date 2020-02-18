@@ -18,7 +18,7 @@
         {
             if (this.IsUserLoggedIn())
             {
-                return Redirect("/");
+                return this.Redirect("/");
             }
 
             return this.View(); 
@@ -29,7 +29,7 @@
         {
             if (this.IsUserLoggedIn())
             {
-                return Redirect("/");
+                return this.Redirect("/");
             }
 
             var userId = this.userService.GetUserId(input.Username, input.Password);
@@ -37,17 +37,17 @@
             if (userId != null)
             {
                 this.SignIn(userId);
-                return Redirect("/Trips/All");
+                return this.Redirect("/Trips/All");
             }
 
-            return Redirect("/Users/Login");
+            return this.Redirect("/Users/Login");
         }
 
         public HttpResponse Register()
         {
             if (this.IsUserLoggedIn())
             {
-                return Redirect("/");
+                return this.Redirect("/");
             }
 
             return this.View();
@@ -58,36 +58,42 @@
         {
             if (this.IsUserLoggedIn())
             {
-                return Redirect("/");
+                return this.Redirect("/");
             }
 
             if (input.Username.Length < 5
              || input.Username.Length > 20
              || string.IsNullOrWhiteSpace(input.Username))
             {
-                return Redirect("/Users/Register");
+                return this.Redirect("/Users/Register");
             }
 
             if(string.IsNullOrWhiteSpace(input.Email))
             {
-                return Redirect("/Users/Register");
+                return this.Redirect("/Users/Register");
             }
 
             if (input.Password.Length < 6
              || input.Password.Length > 20
              || string.IsNullOrWhiteSpace(input.Password))
             {
-                return Redirect("/Users/Register");
+                return this.Redirect("/Users/Register");
             }
 
             if (input.Password != input.ConfirmPassword)
             {
-                return Redirect("/Users/Register");
+                return this.Redirect("/Users/Register");
             }                       
 
             this.userService.Register(input.Username, input.Email, input.Password);
 
-            return Redirect("/Users/Login");
+            return this.Redirect("/Users/Login");
+        }
+
+        public HttpResponse Logout()
+        {
+            this.SignOut();
+            return this.Redirect("/");
         }
     }
 }
