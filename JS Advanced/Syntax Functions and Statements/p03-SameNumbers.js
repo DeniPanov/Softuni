@@ -1,3 +1,5 @@
+"use strict";
+
 function solve(x){
     x = x.toString()
         .split("");

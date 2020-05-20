@@ -1,3 +1,5 @@
+"use strict";
+
 function solve(x, y){
     while(y){
         let temp = y;
